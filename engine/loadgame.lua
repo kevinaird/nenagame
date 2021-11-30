@@ -133,11 +133,11 @@ return function(onCancel)
         height=28
     },function() 
         print("cancelling")
+        closeFn()
         if onCancel then 
             print("calling onCancel")
             onCancel() 
         end
-        closeFn()
     end)
 
 
