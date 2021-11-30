@@ -20,6 +20,7 @@ local Interactable = require("engine.interactable")
 local Inventory = require("engine.inventory")
 local msg = require("engine.narrator")
 local options = require("engine.options")
+local BGM = require("engine.bgm")
 
 -- Content 
 defaultChar = require("characters.default")
@@ -36,9 +37,8 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local backgroundMusic = audio.loadStream( "music/sclubparty.mp3" )
-    audio.play( backgroundMusic )
-    self.backgroundMusic = backgroundMusic
+    local bgm = BGM:new()
+    bgm:play( "music/sclubparty.mp3" )
 
     local world = createWorld(sceneGroup)
     self.world = world
@@ -101,9 +101,9 @@ function scene:create( event )
     })
     
     neve = Character:new(world,map,{
-        name="Neve",
-        spec=defaultChar,
-        avatar="art/avatar1.png",
+        name="Nev",
+        spec=require("characters.nev"),
+        avatar="art/nev.png",
         startX=99,
         startY=28,
         actions={
@@ -116,7 +116,9 @@ function scene:create( event )
                 end
                 async.waterfall({
                     function(next) nena:moveTo(92,28,next) end,
+                    function(next) nena:setFacing(1) next() end,
                     function(next) msg("OMG Hi Neve!!",next) end,
+                    function(next) neve:setFacing(-1) next() end,
                     function(next) msg(neve,"Hi There!",next) end,
                     function(next) 
                         local function showOptions()
@@ -189,6 +191,10 @@ function scene:create( event )
                                     end
                                 })
                             end
+                            table.insert(choices, { 
+                                label="That's all", 
+                                fn=function() next() end
+                            });
 
                             options(choices, next) 
                         end
@@ -346,7 +352,7 @@ function scene:hide( event )
  
     if ( phase == "will" ) then
         -- Code here runs when the scene is on screen (but is about to go off screen)
-        audio.fadeOut()
+        
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
         if self.nena then self.nena:deinit() end

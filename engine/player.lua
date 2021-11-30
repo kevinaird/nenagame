@@ -14,10 +14,12 @@ function Player:new(world, map, character, opts)
     local canMove = true
     local isClosing = false
     Runtime:addEventListener("dialogOpen",function() 
+        print("dialogOpen")
         canMove=false 
         isClosing = false
     end)
     Runtime:addEventListener("dialogClosed",function() 
+        print("dialogClosed")
         isClosing = true
         timer.performWithDelay(100, function()
             if isClosing then canMove=true end

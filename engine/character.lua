@@ -158,9 +158,17 @@ function Character:getXY()
 end
 
 function Character:moveTo(endx, endy,onFinish)
+    self:moveTo1(endx,endy,true,onFinish)
+end
+
+function Character:moveTo1(endx, endy,allowInterupt,onFinish)
     print(('move to x: %d - y: %d'):format(endx, endy))
     print(('background x: %d - y: %d'):format(self.map.background.x, self.map.background.y))
     print(('sprite x: %d - y: %d'):format(self.sprite.x, self.sprite.y))
+
+    if not allowInterupt then 
+        Runtime:dispatchEvent( { name="dialogOpen" } )
+    end
 
     self.sprite:setSequence( "walk" )
     self.sprite:play()
@@ -180,7 +188,10 @@ function Character:moveTo(endx, endy,onFinish)
         local node = nodes[count]
         if node == nil then
             self.sprite:setSequence( "stand" )
-            self.sprite:play()
+            self.sprite:play()            
+            if not allowInterupt then 
+                Runtime:dispatchEvent( { name="dialogClosed" } )
+            end
             if onFinish then onFinish() end
             return
         end
@@ -245,10 +256,16 @@ function Character:moveTo(endx, endy,onFinish)
             print("no path2");
             self.sprite:setSequence( "stand" )
             self.sprite:play()
+            if not allowInterupt then 
+                Runtime:dispatchEvent( { name="dialogClosed" } )
+            end
         end
     else 
         self.sprite:setSequence( "stand" )
         self.sprite:play()
+        if not allowInterupt then 
+            Runtime:dispatchEvent( { name="dialogClosed" } )
+        end 
     end
 end
 

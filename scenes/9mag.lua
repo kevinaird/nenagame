@@ -20,6 +20,7 @@ local Interactable = require("engine.interactable")
 local Inventory = require("engine.inventory")
 local msg = require("engine.narrator")
 local options = require("engine.options")
+local BGM = require("engine.bgm")
 
 -- Content 
 defaultChar = require("characters.default")
@@ -39,9 +40,8 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local backgroundMusic = audio.loadStream( "music/sclubparty.mp3" )
-    audio.play( backgroundMusic )
-    self.backgroundMusic = backgroundMusic
+    local bgm = BGM:new()
+    bgm:play( "music/sclubparty.mp3" )
 
     local world = createWorld(sceneGroup)
     self.world = world
@@ -91,14 +91,20 @@ function scene:create( event )
             Look=function()
                 async.waterfall({
                     function(next) nena:moveTo(22,39,next) end,
-                    function(next) msg("Looks like a stack of video tapes", next) end,
+                    function(next) 
+                        nena:setFacing(-1)
+                        msg("Looks like a stack of video tapes", next) 
+                    end,
                 })
             end,
             Take=function()
                 if not composer.getVariable("vanLeft") then
                     async.waterfall({
                         function(next) nena:moveTo(22,39,next) end,
-                        function(next) msg(van,"DON'T TOUCH THOSE!", next) end,
+                        function(next) 
+                            nena:setFacing(-1)
+                            msg(van,"DON'T TOUCH THOSE!", next) 
+                        end,
                         function(next) msg(nena,"AAahhh!", next) end,
                         function(next) msg(van,"Sorry - I just need to get rid of those tapes.", next) end,
                         function(next) msg(van,"All the crazy illegal stuff that happened here over the past few weeks was caught on those tapes!", next) end,
@@ -107,6 +113,7 @@ function scene:create( event )
                     async.waterfall({
                         function(next) nena:moveTo(22,39,next) end,
                         function(next) 
+                            nena:setFacing(-1)
                             composer.setVariable("gotTapes",true)
                             Inventory:addItem(securityTapes)
                             securityTapesPic.isVisible = false
@@ -121,18 +128,19 @@ function scene:create( event )
 
     van = Character:new(world,map,{
         name="Van",
-        spec=defaultChar,
-        avatar="art/avatar1.png",
+        spec=require("characters.van"),
+        avatar="art/van.png",
         startX=27,
         startY=39,
         speed=0.5,
         actions={
             Look=function()
-                msg("Oh wow! It's Van from Black Ink Crew Chicago!",next)
+                msg("Oh wow! It's Van from Black Ink Crew Chicago!")
             end,
             Talk=function()
                 async.waterfall({
                     function(next) nena:moveTo(37,37,next) end,
+                    function(next) nena:setFacing(-1); next() end,
                     function(next) msg("Hi Van!",next) end,
                     function(next) msg(van,"Hi there - Would you like a tattoo?",next) end,
                     function(next)
@@ -256,15 +264,16 @@ function scene:create( event )
 
     amber = Interactable:new(world,{
         name="Amber Rose",
-        x=347,
-        y=176,
-        width=93,
-        height=93,
-        avatar="art/avatar2.png",
+        x=364,
+        y=146,
+        width=115,
+        height=115,
+        avatar="art/amber.png",
         useItemOn=function(item)
             if item.name == "Extra Oodie" and composer.getVariable("amberWantsOodie") and not Inventory:hasItem("J Lohr") then
                 async.waterfall({
                     function(next) nena:moveTo(70,40,next) end,
+                    function(next) nena:setFacing(-1); next() end,
                     function(next) msg("Hi Amber - Here's an Oodie. Can we still trade it for a bottle of wine?",next) end,
                     function(next) msg(amber,"Absolutely!",next) end,
                     function(next) Inventory:removeItem(extraOodie,next) end,
@@ -276,12 +285,14 @@ function scene:create( event )
             Look=function()
                 async.waterfall({
                     function(next) nena:moveTo(70,40,next) end,
+                    function(next) nena:setFacing(-1); next() end,
                     function(next) msg("OMG! Is that... AMBER ROSE?!?! She's my fav",next) end,
                 })
             end,
             Talk=function()
                 async.waterfall({
                     function(next) nena:moveTo(70,40,next) end,
+                    function(next) nena:setFacing(-1); next() end,
                     function(next)
                         if not composer.getVariable("metAmber") then
                             composer.setVariable("metAmber",true);
@@ -421,7 +432,6 @@ function scene:hide( event )
  
     if ( phase == "will" ) then
         -- Code here runs when the scene is on screen (but is about to go off screen)
-        audio.fadeOut()
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
         if self.nena then self.nena:deinit() end

@@ -20,6 +20,8 @@ local Interactable = require("engine.interactable")
 local Inventory = require("engine.inventory")
 local msg = require("engine.narrator")
 local options = require("engine.options")
+local cutscene = require("engine.cutscene")
+local BGM = require("engine.bgm")
 
 -- Content 
 defaultChar = require("characters.default")
@@ -36,9 +38,8 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local backgroundMusic = audio.loadStream( "music/sclubparty.mp3" )
-    audio.play( backgroundMusic )
-    self.backgroundMusic = backgroundMusic
+    bgm = BGM:new()
+    bgm:play( "music/IntoTheMystic.mp3" )
 
     local world = createWorld(sceneGroup)
     self.world = world
@@ -76,16 +77,16 @@ function scene:create( event )
 
     kevin = Character:new(world,map,{
         name="Kevin",
-        avatar="art/avatar1.png",
-        spec=defaultChar,
+        avatar="art/kevin.png",
+        spec=require("characters.kevin"),
         startX=35,
         startY=30
     })
 
     neve = Character:new(world,map,{
-        name="Neve",
-        avatar="art/avatar1.png",
-        spec=defaultChar,
+        name="Nev",
+        avatar="art/nev.png",
+        spec=require("characters.nev"),
         startX=38,
         startY=26
     })
@@ -112,10 +113,11 @@ function scene:show( event )
         -- Code here runs when the scene is entirely on screen
  
         composer.setVariable( "lastScene", "wedding" )
+        Runtime:dispatchEvent( { name="dialogOpen" } )
 
         async.waterfall({
-            function(next) nena:moveTo(38,42,next) end,
-            function(next) nena:moveTo(43,30,next) end,
+            function(next) nena:moveTo1(38,42,false,next) end,
+            function(next) nena:moveTo1(43,30,false,next) end,
             function(next) nena:setFacing(-1); next() end,
             function(next) msg("Do I know you?",next) end,
             function(next) msg(kevin,"Hey Nena - It's me Kevin!",next) end,
@@ -126,12 +128,12 @@ function scene:show( event )
             function(next) msg(kevin,"Yes but every now and then the catfish turns out to be the person from the pics right? That's me!",next) end,
             function(next) msg("What about the 'after lockup' part of this show? Are you fresh out of prison?",next) end,
             function(next) msg(kevin,"I am! In this reality we never went on a date and instead I did hard time until just now!",next) end,
-            function(next) msg("This reality? Wait - What did you do!?",next) end,
+            function(next) msg("This reality!? Wait - What did you do!?",next) end,
             function(next) msg(kevin,"This happened and then that happened and then yadda yadda yadda - I'm here now to marry you!",next) end,
             function(next) msg("That explanation was extremely sketchy and I'm suddenly having massive doubts about going through with this...",next) end,
-            function(next) msg(kevin,"Look - I know I may seem a bit sketchy. But picture a world where I didn't go to prison",next) end,
+            function(next) msg(kevin,"Look - I know it may seem a bit sketchy. But picture a world where I didn't go to prison",next) end,
             function(next) msg(kevin,"And instead we went on that first date. And you told me about your love for Maury and I offered to PVR the show for you!",next) end,
-            function(next) msg(kevin,"And every year I would try to make you a crazy cake on your birthday even though I'm only a survival chef!",next) end,
+            function(next) msg(kevin,"And every year I would try to make you a crazy cake on your birthday even though I was only a survival chef when we met!",next) end,
             function(next) msg(kevin,"And we always would hang out and play crazy puzzle games and watch your favourite reality tv shows together!",next) end,
             function(next) msg(kevin,"And 1 day we would move in together--",next) end,
             function(next) msg("That wouldn't happen. I'd make you move next door",next) end,
@@ -141,9 +143,92 @@ function scene:show( event )
             function(next) msg(kevin,"Anyways - In that reality I would love you so much and want to spend the rest of my life with you",next) end,
             function(next) msg("I'm not convinced.",next) end,
             function(next) msg(kevin,"OK - Look I had a feeling I wouldn't be able to convince you. So I got some help! Cue the video!",next) end,
+            function(next) bgm:stop(next) end,
             function(next) 
-
+                Runtime:dispatchEvent( { name="dialogOpen" } )
+                blackness = display.newRect( display.contentCenterX, display.contentCenterY, display.contentWidth*3, display.contentHeight*3 )
+                blackness:setFillColor( 0, 0, 0 )
+                blackness.alpha = 0 
+                transition.to(blackness, { time=500, alpha=1, onComplete=function() next() end})
             end,
+            -- 1. Slide show of our pics
+            function(next) cutscene("NenaAndKev.MP4",false,next) end,
+            -- 2. Yammy fake out video
+            function(next) 
+                yammySheet = graphics.newImageSheet( "art/yammy.png", {
+                    width = 505,
+                    height = 480,
+                    numFrames = 12
+                } )
+                yammy = display.newSprite( yammySheet, {
+                    {
+                        name = "talk",
+                        --start = 1,
+                        --count = 12,
+                        frames={
+                            --        500MS             1400MS                    2.8s   3.1s       3.6      4.1
+                            --        NEENAAA           NEENARAEE                THIISIS YAGIRL     YAAMENEKASAAUNNDDERS
+                            6,6,6,6,6,3,1,1,1,6,6,6,6,6,3,1,1,1,1,6,6,6,6,6,6,6,6,9,1,10,1,11,11,11,10,3,1,6,4,1,10,3,11,6,6,6,
+                        --  5s     5.4        6s        6.5s            7.3                         8.7   9  9.2        9.8
+                        --  THECOMEDIANFRAMERICA           ASYOUCANTELLACCENT                       I HER YA BOYFREND   KEVIN
+                            9,11,8,1,7,1,6,1,1,6,6,6,6,6,6,1,11,4,1,5,5,1,1,8,8,8,6,6,6,6,6,6,6,6,6,1,8,6,1,1,2,8,8,3,3,4,1,3,4,4,4,
+                        --  10.4                11.2          11.8                       13                    14          14.5      
+                        --  LOVESYOUVERYMUCCCCH               ANDTHAT  YOU  TOLD HIM     HE COULD NOT PROPOSE
+                            5,11,11,7,8,11,11,11,6,6,6,6,6,6,6,1,1,9,1,11,11,2,2,1,6,6,6,1,11,11,1,1,2,2,1,2,2,11,1,8,5,10,1,1,1,6,6,
+                        -- 15                     16                 17                 18          18.6        19.2
+                        --  SOMEHOW
+                            10,11,11,6,1,2,2,6,11,3,11,5,6,6,6,6,6,6,1,2,2,1,1,8,8,1,1,1,6,6,6,6,6,6,1,1,2,2,1,1,6,6,6,6,6,6,6,
+                        -- 19.8          20.5     20.9      21.4      21.8          22.5               23.1            23.8        24.4
+                            5,5,8,1,1,1,6,6,6,6,6,8,8,8,8,5,6,6,6,6,6,3,1,6,8,4,10,4,6,6,6,6,6,6,6,6,6,1,2,2,1,2,2,1,1,6,6,6,6,6,6,6
+
+                        },
+                        time = 24450,
+                        loopCount = 0,
+                        loopDirection = "forward"
+                    },
+                })
+                yammy:setSequence( "talk" )
+                yammy.x = display.contentCenterX
+                yammy.y = display.contentCenterY
+                yammy.yScale = 0.6
+                yammy.xScale = 0.6
+                yammy:play()
+                --timer.performWithDelay(27*1000,function() next() end);
+                local yammyAudio = audio.loadStream( "music/yammy.mp3" )
+                local yammyChannel = audio.play( yammyAudio, { onComplete=function() next() end} )
+                audio.setVolume(1,{ channel=yammyChannel })
+            end,
+            function(next) yammy:removeSelf(); next() end,
+            -- 3. Nikki Real video
+            function(next) cutscene("cameo1.mp4",false,next) end,
+            -- 4. Buck Real video
+            function(next) cutscene("cameo2.mp4",false,next) end,
+            -- 5. Proposal
+            function(next) msg(kevin,"HoboPro - Will you marry me?",next) end,
+            function(next) 
+                local function showOptions()
+                    options({
+                        {
+                            label="Yes!",
+                            fn=function() next() end,
+                        },
+                        {
+                            label="No.",
+                            fn=function()
+                                async.waterfall({
+                                    function(next) msg(kevin,"Wrong answer!!",next) end,
+                                    function(next) msg(kevin,"HoboPro - Will you marry me?",next) end,
+                                    function(next) showOptions() end,
+                                })
+                            end,
+                        }
+                    })
+                end
+                showOptions()
+            end,
+            -- The End!
+            function(next) msg(kevin,"Woohhooooo!!!!",next) end,
+            function(next) composer.gotoScene("scenes.startup") end,
         })
     end
 
@@ -158,7 +243,6 @@ function scene:hide( event )
  
     if ( phase == "will" ) then
         -- Code here runs when the scene is on screen (but is about to go off screen)
-        audio.fadeOut()
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
         if self.nena then self.nena:deinit() end

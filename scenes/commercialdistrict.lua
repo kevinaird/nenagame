@@ -20,6 +20,7 @@ local Interactable = require("engine.interactable")
 local Inventory = require("engine.inventory")
 local msg = require("engine.narrator")
 local options = require("engine.options")
+local BGM = require("engine.bgm")
 
 -- Content 
 defaultChar = require("characters.nena")
@@ -38,9 +39,8 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local backgroundMusic = audio.loadStream( "music/sclubparty.mp3" )
-    audio.play( backgroundMusic )
-    self.backgroundMusic = backgroundMusic
+    local bgm = BGM:new()
+    bgm:play( "music/sclubparty.mp3" )
 
     local world = createWorld(sceneGroup)
     self.world = world
@@ -144,6 +144,7 @@ function scene:create( event )
             Enter=function()
                 async.waterfall({
                     function(next) nena:moveTo(62,124,next) end,
+                    function(next) msg("It's closed!",next) end,
                     --function(next) composer.gotoScene( "scenes.park" ) end,
                 })
             end
@@ -160,6 +161,7 @@ function scene:create( event )
             Enter=function()
                 async.waterfall({
                     function(next) nena:moveTo(99,123,next) end,
+                    function(next) msg("It's closed!",next) end,
                     --function(next) composer.gotoScene( "scenes.park" ) end,
                 })
             end
@@ -208,6 +210,7 @@ function scene:create( event )
             Enter=function()
                 async.waterfall({
                     function(next) nena:moveTo(254,124,next) end,
+                    function(next) msg("It's closed!",next) end,
                     --function(next) composer.gotoScene( "scenes.park" ) end,
                 })
             end
@@ -305,7 +308,7 @@ function scene:hide( event )
  
     if ( phase == "will" ) then
         -- Code here runs when the scene is on screen (but is about to go off screen)
-        audio.fadeOut()
+        
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
         if self.nena then self.nena:deinit() end

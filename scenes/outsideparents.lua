@@ -20,6 +20,7 @@ local Interactable = require("engine.interactable")
 local Inventory = require("engine.inventory")
 local msg = require("engine.narrator")
 local options = require("engine.options")
+local BGM = require("engine.bgm")
 
 -- Content 
 defaultChar = require("characters.default")
@@ -38,9 +39,8 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local backgroundMusic = audio.loadStream( "music/sclubparty.mp3" )
-    audio.play( backgroundMusic )
-    self.backgroundMusic = backgroundMusic
+    local bgm = BGM:new()
+    bgm:play( "music/sclubparty.mp3" )
 
     local world = createWorld(sceneGroup)
     self.world = world
@@ -78,8 +78,8 @@ function scene:create( event )
 
     dad = Character:new(world,map,{
         name="dad",
-        spec=defaultChar,
-        avatar="art/avatar1.png",
+        spec=require("characters.dennis"),
+        avatar="art/dennis.png",
         startX=33,
         startY=66,
         giveItemTo=function(item)
@@ -91,6 +91,7 @@ function scene:create( event )
                 end
                 async.waterfall({
                     function(next) nena:moveTo(42,66,next) end,
+                    function(next) nena:setFacing(-1) next() end,
                     function(next) msg("Hi Daddy! Do you want an oodie?",next) end,
                     function(next) 
                         local i = composer.getVariable("offeredDadAnOodie")
@@ -101,6 +102,13 @@ function scene:create( event )
                         end
                     end,
                 })
+            else
+                async.waterfall({
+                    function(next) nena:moveTo(42,66,next) end,
+                    function(next) nena:setFacing(-1) next() end,
+                    function(next) msg("Hi Daddy! Do you want this?",next) end,
+                    function(next) msg(dad,"I'd rather jump off a bridge then take that!!",next) end,
+                })
             end
         end,
         actions={
@@ -110,6 +118,7 @@ function scene:create( event )
             Talk=function()
                 async.waterfall({
                     function(next) nena:moveTo(42,66,next) end,
+                    function(next) nena:setFacing(-1) next() end,
                     function(next) msg("Hi Daddy!",next) end,
                     function(next) msg(dad,"Hi Neens.. OMG. What are you wearing?",next) end,
                     function(next) msg("It's my outdoor Oodie!",next) end,
@@ -221,7 +230,7 @@ function scene:hide( event )
  
     if ( phase == "will" ) then
         -- Code here runs when the scene is on screen (but is about to go off screen)
-        audio.fadeOut()
+        
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
         if self.nena then self.nena:deinit() end

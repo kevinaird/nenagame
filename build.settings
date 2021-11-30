@@ -37,6 +37,18 @@ settings =
 		},
 	},
 
+    window =
+    {
+        defaultMode = "maximized",
+        enableMaximizeButton = true,
+        enableMinimizeButton = true,
+        enableCloseButton = true,
+        resizable = true,
+        titleText = {
+            default = "Nena Game",
+		},
+    },  
+
 	--
 	-- Plugins section
 	--

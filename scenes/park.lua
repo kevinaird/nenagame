@@ -20,6 +20,7 @@ local Interactable = require("engine.interactable")
 local Inventory = require("engine.inventory")
 local msg = require("engine.narrator")
 local options = require("engine.options")
+local BGM = require("engine.bgm")
 
 -- Content 
 defaultChar = require("characters.default")
@@ -38,9 +39,8 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local backgroundMusic = audio.loadStream( "music/sclubparty.mp3" )
-    audio.play( backgroundMusic )
-    self.backgroundMusic = backgroundMusic
+    local bgm = BGM:new()
+    bgm:play( "music/sclubparty.mp3" )
 
     local world = createWorld(sceneGroup)
     self.world = world
@@ -77,8 +77,8 @@ function scene:create( event )
 
     mom = Character:new(world,map,{
         name="mom",
-        spec=defaultChar,
-        avatar="art/avatar1.png",
+        spec=require("characters.winsome"),
+        avatar="art/winsome.png",
         startX=95,
         startY=57,
         giveItemTo=function(item)
@@ -121,7 +121,7 @@ function scene:create( event )
 
     churroStand = Interactable:new(world,{
         name="Churro Stand",
-        avatar="art/avatar2.png",
+        avatar="art/cashier.png",
         x=85,
         y=308,
         width=114,
@@ -130,6 +130,7 @@ function scene:create( event )
             Talk=function()
                 async.waterfall({
                     function(next) nena:moveTo(27,59,next) end,
+                    function(next) nena:setFacing(-1) next() end,
                     function(next) 
                         if not composer.getVariable("gotFreeChurro") then 
                             async.waterfall({
@@ -257,7 +258,7 @@ function scene:hide( event )
  
     if ( phase == "will" ) then
         -- Code here runs when the scene is on screen (but is about to go off screen)
-        audio.fadeOut()
+        
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
         if self.nena then self.nena:deinit() end

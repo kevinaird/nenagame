@@ -20,9 +20,9 @@ local Interactable = require("engine.interactable")
 local Inventory = require("engine.inventory")
 local msg = require("engine.narrator")
 local options = require("engine.options")
+local BGM = require("engine.bgm")
 
--- Content 
-defaultChar = require("characters.default")
+-- Content
 nenaChar = require("characters.nena")
 
  
@@ -36,9 +36,8 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local backgroundMusic = audio.loadStream( "music/allornothing1.mp3" )
-    audio.play( backgroundMusic )
-    self.backgroundMusic = backgroundMusic
+    local bgm = BGM:new()
+    bgm:play( "music/allornothing1.mp3" )
 
     local world = createWorld(sceneGroup)
     self.world = world
@@ -76,8 +75,8 @@ function scene:create( event )
 
     amber = Character:new(world,map,{
         name="Amber Rose",
-        avatar="art/avatar2.png",
-        spec=defaultChar,
+        avatar="art/amber.png",
+        spec=require("characters.amber"),
         startX=43,
         startY=37
     })
@@ -85,8 +84,8 @@ function scene:create( event )
 
     laura = Character:new(world,map,{
         name="Laura",
-        avatar="art/avatar2.png",
-        spec=defaultChar,
+        avatar="art/laura.png",
+        spec=require("characters.laura"),
         startX=56,
         startY=35
     })
@@ -94,8 +93,8 @@ function scene:create( event )
 
     duate = Character:new(world,map,{
         name="Duate",
-        avatar="art/avatar2.png",
-        spec=defaultChar,
+        avatar="art/duate.png",
+        spec=require("characters.duate"),
         startX=78,
         startY=35
     })
@@ -103,8 +102,8 @@ function scene:create( event )
 
     leah = Character:new(world,map,{
         name="Leah",
-        avatar="art/avatar2.png",
-        spec=defaultChar,
+        avatar="art/leah.png",
+        spec=require("characters.leah"),
         startX=93,
         startY=37
     })
@@ -134,7 +133,7 @@ function scene:show( event )
         composer.setVariable( "lastScene", "bachelorette" )
 
         async.waterfall({
-            function(next) nena:moveTo(69,38,next) end,
+            function(next) nena:moveTo1(69,38,false,next) end,
             function(next) msg("It's the bachelorette party!",next) end,
             function(next) msg(duate,"Hey boo! What is this party about?",next) end,
             function(next) msg("Guys - I have something to tell you!",next) end,
@@ -161,7 +160,6 @@ function scene:hide( event )
  
     if ( phase == "will" ) then
         -- Code here runs when the scene is on screen (but is about to go off screen)
-        audio.fadeOut()
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
         if self.nena then self.nena:deinit() end

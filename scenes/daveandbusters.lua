@@ -20,6 +20,7 @@ local Interactable = require("engine.interactable")
 local Inventory = require("engine.inventory")
 local msg = require("engine.narrator")
 local options = require("engine.options")
+local BGM = require("engine.bgm")
 
 -- Content 
 defaultChar = require("characters.default")
@@ -37,9 +38,8 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local backgroundMusic = audio.loadStream( "music/sclubparty.mp3" )
-    audio.play( backgroundMusic )
-    self.backgroundMusic = backgroundMusic
+    local bgm = BGM:new()
+    bgm:play( "music/sclubparty.mp3" )
 
     local world = createWorld(sceneGroup)
     self.world = world
@@ -76,8 +76,8 @@ function scene:create( event )
 
     rupaul = Character:new(world,map,{
         name="Rupaul",
-        avatar="art/avatar2.png",
-        spec=defaultChar,
+        avatar="art/rupaul.png",
+        spec=require("characters.rupaul"),
         startX=64,
         startY=41,
         giveItemTo=function(item) 
@@ -102,6 +102,7 @@ function scene:create( event )
             Talk=function()
                 async.waterfall({
                     function(next) nena:moveTo(72,38,next) end,
+                    function(next) nena:setFacing(-1) next() end,
                     function(next) msg("OMG Hi Ru - I'm a big fan!",next) end,
                     function(next) msg(rupaul,"We’re all born naked and the rest is drag!",next) end,
                     function(next)
@@ -267,6 +268,69 @@ function scene:create( event )
         }
     })
 
+    queen1 = Character:new(world,map,{
+        name="Shangela",
+        avatar="art/shangela.png",
+        spec=require("characters.shangela"),
+        startX=87,
+        startY=33,
+        actions={
+            Look=function()
+                msg("OMG - It's Shangela!! She's my favourite queen!!")
+            end,
+            Talk=function()
+                async.waterfall({
+                    function(next) nena:moveTo(80,33,next) end,
+                    function(next) nena:setFacing(1) next() end,
+                    function(next) msg("OMG! Hi Shangela!! You're my favourite queen!", next) end,
+                    function(next) msg(queen1,"Life is about putting forth your best effort and showing up!") end,
+                })
+            end,
+        }
+    })
+
+    queen2 = Character:new(world,map,{
+        name="Bob the Drag Queen",
+        avatar="art/bob.png",
+        spec=require("characters.bob"),
+        startX=51,
+        startY=33,
+        actions={
+            Look=function()
+                msg("It's Bob the Drag Queen!!")
+            end,
+            Talk=function()
+                async.waterfall({
+                    function(next) nena:moveTo(60,33,next) end,
+                    function(next) nena:setFacing(-1) next() end,
+                    function(next) msg("Hi Bob!!", next) end,
+                    function(next) msg(queen2,"Purse first! Purse first! Walk into the room purse first! Clack!") end,
+                })
+            end,
+        }
+    })
+
+    queen3 = Character:new(world,map,{
+        name="Eureka O'Hara",
+        avatar="art/eureka.png",
+        spec=require("characters.eureka"),
+        startX=15,
+        startY=41,
+        actions={
+            Look=function()
+                msg("It's Eureka O'Hara!!")
+            end,
+            Talk=function()
+                async.waterfall({
+                    function(next) nena:moveTo(23,41,next) end,
+                    function(next) nena:setFacing(-1) next() end,
+                    function(next) msg("Hi Eureka!!", next) end,
+                    function(next) msg(queen3,"Feeling PHAT, with a PH, Pretty Hot And Tasty!") end,
+                })
+            end,
+        }
+    })
+
     door = Interactable:new(world,{
         name="Door",
         x=559,
@@ -292,13 +356,13 @@ function scene:create( event )
         actions={
             Look=function()
                 async.waterfall({
-                    function(next) nena:moveTo(45,26,next) end,
+                    function(next) nena:moveTo(43,26,next) end,
                     function(next) msg("It's a crane game! These things are so difficult.",next) end,
                 })
             end,
             Play=function()
                 async.waterfall({
-                    function(next) nena:moveTo(45,26,next) end,
+                    function(next) nena:moveTo(43,26,next) end,
                     function(next) msg("It's a crane game! Let's see if I can win...",next) end,
                     function(next) 
                         local attempts = composer.getVariable("craneGameAttempts")
@@ -318,6 +382,70 @@ function scene:create( event )
                     end,
                 })
             end
+        }
+    })
+
+    skeeBall = Interactable:new(world,{
+        name="Skee Ball",
+        x=100,
+        y=127,
+        width=75,
+        height=75,
+        actions={
+            Look=function()
+                async.waterfall({
+                    function(next) nena:moveTo(32,17,next) end,
+                    function(next) msg("It's skee ball!",next) end,
+                })
+            end,
+        }
+    })
+
+    spaceInvaders = Interactable:new(world,{
+        name="Space Invaders",
+        x=198,
+        y=74,
+        width=69,
+        height=123,
+        actions={
+            Look=function()
+                async.waterfall({
+                    function(next) nena:moveTo(33,33,next) end,
+                    function(next) msg("It's Space Invaders!",next) end,
+                })
+            end,
+        }
+    })
+
+    darts = Interactable:new(world,{
+        name="Darts",
+        x=487,
+        y=74,
+        width=48,
+        height=124,
+        actions={
+            Look=function()
+                async.waterfall({
+                    function(next) nena:moveTo(65,26,next) end,
+                    function(next) msg("It's Darts!",next) end,
+                })
+            end,
+        }
+    })
+
+    basketball = Interactable:new(world,{
+        name="Basketball",
+        x=18,
+        y=131,
+        width=76,
+        height=110,
+        actions={
+            Look=function()
+                async.waterfall({
+                    function(next) nena:moveTo(22,36,next) end,
+                    function(next) msg("It's Basketball!",next) end,
+                })
+            end,
         }
     })
 
@@ -356,7 +484,7 @@ function scene:hide( event )
  
     if ( phase == "will" ) then
         -- Code here runs when the scene is on screen (but is about to go off screen)
-        audio.fadeOut()
+        
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
         if self.nena then self.nena:deinit() end

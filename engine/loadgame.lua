@@ -9,8 +9,9 @@ local json = require("json")
 
 local Button = require("engine.button")
 local Inventory = require("engine.inventory")
+local BGM = require("engine.bgm")
 
-return function()
+return function(onCancel)
 
     local function loadFn(save)
         local saveData = {}
@@ -46,7 +47,8 @@ return function()
         if currentScene then
             if currentScene.nena then currentScene.nena:deinit() end
 
-            audio.fadeOut()
+            local bgm = BGM:new()
+            bgm:stop()
             composer.removeHidden()
             composer.removeScene( currentSceneName )
             composer.gotoScene( saveData.scene )
@@ -129,7 +131,14 @@ return function()
         y=display.contentHeight/6+20+16,
         width=44,
         height=28
-    },closeFn)
+    },function() 
+        print("cancelling")
+        if onCancel then 
+            print("calling onCancel")
+            onCancel() 
+        end
+        closeFn()
+    end)
 
 
     local savedGames = {}

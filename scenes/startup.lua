@@ -75,7 +75,7 @@ function scene:create( event )
             })
         end,
         function (next) 
-            txt.text = "In collaboration with 'Duate helped me' Productions..."
+            txt.text = "In collaboration with 'People who love Nena' Inc..."
             transition.to(txt,{
                 alpha=1,
                 time=2000,
@@ -114,44 +114,45 @@ function scene:create( event )
 end
 
 function scene:showMenu()
-    options({
-        { 
-            label="New Game", 
-            fn=function() 
+    bgmFadeout = {
+        function(next)
+            audio.fadeOut({ channel=self.backgroundMusicChannel, time=2000 })
+            transition.to(self.background,{
+                alpha=0,
+                time=2000,
+                onComplete=function() next() end
+            })
+        end,
+        function(next)
+            audio.stop(self.backgroundMusicChannel)
+            audio.setVolume( 1 , { channel=self.backgroundMusicChannel })
 
-                async.waterfall({
-                    function(next)
-                        audio.fadeOut({ channel=self.backgroundMusicChannel, time=2000 })
-                        transition.to(self.background,{
-                            alpha=0,
-                            time=2000,
-                            onComplete=function() next() end
-                        })
-                    end,
-                    function(next)
-                        audio.stop(self.backgroundMusicChannel)
-                        audio.setVolume( 1 , { channel=self.backgroundMusicChannel })
+            -- cutscene("yammy.mp4",true,next)
+            next()
 
-                        -- cutscene("yammy.mp4",true,next)
-                        next()
-
-                    end
-                }, function()
-                    composer.gotoScene( "scenes.nenasapartment" )
-                end)
-            end 
-        },
-        { 
-            label="Load Game", 
-            fn=function() 
-                require("engine.loadgame")()
-                -- async.waterfall({
-                --     function(next) msg("Whoops. That doesn't work yet.",next) end,
-                --     function(next) self:showMenu() end
-                -- })
-            end 
-        },
-    })
+        end
+    }
+    local function showOptions()
+        options({
+            { 
+                label="New Game", 
+                fn=function() 
+                    async.waterfall(bgmFadeout, function()
+                        composer.gotoScene( "scenes.nenasapartment" )
+                    end)
+                end 
+            },
+            { 
+                label="Load Game", 
+                fn=function() 
+                    async.waterfall(bgmFadeout, function()
+                        require("engine.loadgame")(showOptions)
+                    end)
+                end 
+            },
+        })
+    end
+    showOptions()
 end
  
  

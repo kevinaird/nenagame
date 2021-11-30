@@ -20,6 +20,7 @@ local Interactable = require("engine.interactable")
 local Inventory = require("engine.inventory")
 local msg = require("engine.narrator")
 local options = require("engine.options")
+local BGM = require("engine.bgm")
 
 -- Content 
 defaultChar = require("characters.default")
@@ -38,9 +39,8 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local backgroundMusic = audio.loadStream( "music/maury.mp3" )
-    audio.play( backgroundMusic )
-    self.backgroundMusic = backgroundMusic
+    local bgm = BGM:new()
+    bgm:play( "music/maury.mp3" )
 
     local world = createWorld(sceneGroup)
     self.world = world
@@ -112,8 +112,8 @@ function scene:create( event )
 
     security1 = Character:new(world,map,{
         name="Security Guy 1",
-        avatar="art/avatar1.png",
-        spec=defaultChar,
+        avatar="art/guard.png",
+        spec=require("characters.guard"),
         startX=-10,
         startY=36,
         actions={
@@ -126,8 +126,8 @@ function scene:create( event )
 
     security2 = Character:new(world,map,{
         name="Security Guy 2",
-        avatar="art/avatar1.png",
-        spec=defaultChar,
+        avatar="art/guard.png",
+        spec=require("characters.guard"),
         startX=90,
         startY=36,
         actions={
@@ -187,8 +187,8 @@ function scene:create( event )
 
     david = Character:new(world,map,{
         name="David",
-        avatar="art/avatar1.png",
-        spec=defaultChar,
+        avatar="art/david.png",
+        spec=require("characters.david"),
         startX=22,
         startY=31,
         actions={
@@ -243,8 +243,8 @@ function scene:create( event )
     
     annie = Character:new(world,map,{
         name="Annie",
-        avatar="art/avatar2.png",
-        spec=defaultChar,
+        avatar="art/annie.png",
+        spec=require("characters.annie"),
         startX=33,
         startY=31,
         actions={
@@ -298,8 +298,8 @@ function scene:create( event )
     
     andrea = Character:new(world,map,{
         name="Andrea",
-        avatar="art/avatar2.png",
-        spec=defaultChar,
+        avatar="art/andrea.png",
+        spec=require("characters.andrea"),
         startX=43,
         startY=31,
         actions={
@@ -353,8 +353,8 @@ function scene:create( event )
     
     lamar = Character:new(world,map,{
         name="Lamar",
-        avatar="art/avatar1.png",
-        spec=defaultChar,
+        avatar="art/lamar.png",
+        spec=require("characters.lamar"),
         startX=53,
         startY=31,
         actions={
@@ -408,8 +408,8 @@ function scene:create( event )
     
     maury = Character:new(world,map,{
         name="Maury",
-        avatar="art/avatar1.png",
-        spec=defaultChar,
+        avatar="art/maury.png",
+        spec=require("characters.maury"),
         startX=28,
         startY=40,
         actions={
@@ -480,15 +480,19 @@ function scene:create( event )
                         if composer.getVariable("mauryLeft") and Inventory:hasItem("Lie Detector Results") then 
                             async.waterfall({
                                 function(next) msg(security1,"Hey you! Put the lie detector results back!",next) end,
-                                function(next) nena:moveTo(28,40,next) end,
+                                function(next) 
+                                    Runtime:dispatchEvent( { name="dialogOpen" } )
+                                    nena:moveTo1(28,40,false,next) 
+                                end,
                                 function(next) 
                                     Inventory:removeItem(lieDetectorResults)
                                     composer.setVariable("tookLieDetectorResults",false)
                                     mauryTable.sprite:setSequence( "stand" )
                                     mauryTable.sprite:play()
-                                    nena:moveTo(75,38,next)
+                                    nena:moveTo1(75,38,false,next)
                                 end,
                                 function(next) 
+                                    Runtime:dispatchEvent( { name="dialogClosed" } )
                                     composer.setVariable("davidMad",false)
                                     composer.setVariable("annieMad",false)
                                     composer.setVariable("andreaMad",false)
@@ -669,7 +673,7 @@ function scene:hide( event )
  
     if ( phase == "will" ) then
         -- Code here runs when the scene is on screen (but is about to go off screen)
-        audio.fadeOut()
+        
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
         if self.nena then self.nena:deinit() end

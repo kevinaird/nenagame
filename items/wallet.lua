@@ -1,4 +1,4 @@
 return {
     name="Wallet",
-    filename="art/potion.png"
+    filename="art/wallet.png"
 }

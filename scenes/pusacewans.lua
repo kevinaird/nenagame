@@ -20,6 +20,7 @@ local Interactable = require("engine.interactable")
 local Inventory = require("engine.inventory")
 local msg = require("engine.narrator")
 local options = require("engine.options")
+local BGM = require("engine.bgm")
 
 -- Content 
 defaultChar = require("characters.default")
@@ -38,9 +39,8 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local backgroundMusic = audio.loadStream( "music/sclubparty.mp3" )
-    audio.play( backgroundMusic )
-    self.backgroundMusic = backgroundMusic
+    local bgm = BGM:new()
+    bgm:play( "music/sclubparty.mp3" )
 
     local world = createWorld(sceneGroup)
     self.world = world
@@ -75,8 +75,8 @@ function scene:create( event )
 
     clerk = Character:new(world,map,{
         name="clerk",
-        spec=defaultChar,
-        avatar="art/avatar1.png",
+        spec=require("characters.nicole"),
+        avatar="art/nicole.png",
         startX=103,
         startY=49,
         giveItemTo=function(item)
@@ -112,12 +112,23 @@ function scene:create( event )
                             local choices = {}
 
                             table.insert(choices, { 
-                                label="Ask if he knows Mark PusaCewan", 
+                                label="Ask if she's Nicole from 90 Day Fiance", 
+                                fn=function() 
+                                    async.waterfall({
+                                        function(next) msg(nena, "Excuse me - Are you Nicole from 90 day fiance?", next) end,
+                                        function(next) msg(clerk, "Yes I am! Can you believe it? I'm working at Pusacewans now! What a life upgrade!!", next) end,
+                                        function(next) showOptions() end,
+                                    })
+                                end
+                            });
+                            table.insert(choices, { 
+                                label="Ask if she knows Mark PusaCewan", 
                                 fn=function() 
                                     async.waterfall({
                                         function(next) msg(nena, "Hi - Do you know Mark PusaCewan?", next) end,
                                         function(next) msg(clerk, "Ya I know Mark! He's a genius chef. No one can beat him on the food network.", next) end,
                                         function(next) msg(clerk, "But he can be a real stickler about what food goes on the shelves here. He keeps discontinuing my favourite foods!", next) end,
+                                        function(next) msg(clerk, "I just like simple foods... like french fries!", next) end,
                                         function(next) showOptions() end,
                                     })
                                 end
@@ -276,7 +287,7 @@ function scene:create( event )
 
     cashier = Interactable:new(world,{
         name="Cashier",
-        avatar="art/avatar2.png",
+        avatar="art/cashier.png",
         x=157,
         y=274,
         width=91,
@@ -285,6 +296,7 @@ function scene:create( event )
             Talk=function()
                 async.waterfall({
                     function(next) nena:moveTo(29,63,next) end,
+                    function(next) nena:setFacing(-1) next() end,
                     function(next) 
                         if Inventory:hasItem(truffeChips.name) and not composer.getVariable("paidForChips") then
                             async.waterfall({
@@ -405,7 +417,7 @@ function scene:hide( event )
  
     if ( phase == "will" ) then
         -- Code here runs when the scene is on screen (but is about to go off screen)
-        audio.fadeOut()
+        
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
         if self.nena then self.nena:deinit() end

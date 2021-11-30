@@ -20,6 +20,7 @@ local Interactable = require("engine.interactable")
 local Inventory = require("engine.inventory")
 local msg = require("engine.narrator")
 local options = require("engine.options")
+local BGM = require("engine.bgm")
 
 -- Content 
 defaultChar = require("characters.default")
@@ -38,9 +39,8 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local backgroundMusic = audio.loadStream( "music/sclubparty.mp3" )
-    audio.play( backgroundMusic )
-    self.backgroundMusic = backgroundMusic
+    local bgm = BGM:new()
+    bgm:play( "music/sclubparty.mp3" )
 
     local world = createWorld(sceneGroup)
     self.world = world
@@ -77,14 +77,15 @@ function scene:create( event )
 
     britney = Character:new(world,map,{
         name="Britney",
-        avatar="art/avatar2.png",
-        spec=defaultChar,
+        avatar="art/britney.png",
+        spec=require("characters.britney"),
         startX=14,
         startY=36,
         giveItemTo=function(item)
             if item.name == "Lie Detector Results" then 
                 async.waterfall({
                     function(next) nena:moveTo(34,38,next) end,
+                    function(next) nena:setFacing(-1) next() end,
                     function(next) msg("Hi Britney - I have the lie detector results!",next) end,
                     function(next) msg(britney,"That's amazing!! Great work! Here's the key card as promised",next) end,
                     function(next) 
@@ -103,6 +104,7 @@ function scene:create( event )
             Talk=function()
                 async.waterfall({
                     function(next) nena:moveTo(34,38,next) end,
+                    function(next) nena:setFacing(-1) next() end,
                     function(next) msg("OMG Hi Britney!!!",next) end,
                     function(next) msg(britney,"Hola!",next) end,
                     function(next)
@@ -243,7 +245,6 @@ function scene:hide( event )
  
     if ( phase == "will" ) then
         -- Code here runs when the scene is on screen (but is about to go off screen)
-        audio.fadeOut()
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
         if self.nena then self.nena:deinit() end

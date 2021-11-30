@@ -20,6 +20,7 @@ local Interactable = require("engine.interactable")
 local Inventory = require("engine.inventory")
 local msg = require("engine.narrator")
 local options = require("engine.options")
+local BGM = require("engine.bgm")
 
 -- Content 
 defaultChar = require("characters.default")
@@ -38,9 +39,8 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local backgroundMusic = audio.loadStream( "music/sclubparty.mp3" )
-    audio.play( backgroundMusic )
-    self.backgroundMusic = backgroundMusic
+    local bgm = BGM:new()
+    bgm:play( "music/sclubparty.mp3" )
 
     local world = createWorld(sceneGroup)
     self.world = world
@@ -72,8 +72,8 @@ function scene:create( event )
 
     bouncer = Character:new(world,map,{
         name="Bouncer",
-        avatar="art/avatar1.png",
-        spec=defaultChar,
+        avatar="art/guard.png",
+        spec=require("characters.guard"),
         startX=35,
         startY=123,
         actions={
@@ -101,8 +101,8 @@ function scene:create( event )
 
     bellhop = Character:new(world,map,{
         name="Bell Hop",
-        avatar="art/avatar1.png",
-        spec=defaultChar,
+        avatar="art/bellhop.png",
+        spec=require("characters.bellhop"),
         startX=128,
         startY=123,
         actions={
@@ -263,7 +263,6 @@ function scene:hide( event )
  
     if ( phase == "will" ) then
         -- Code here runs when the scene is on screen (but is about to go off screen)
-        audio.fadeOut()
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
         if self.nena then self.nena:deinit() end
