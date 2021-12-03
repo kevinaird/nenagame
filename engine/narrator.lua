@@ -45,8 +45,8 @@ function dialog(who, text, nextFn)
         x=avatar.width, 
         y=display.contentHeight * 2/3 + 20,
         width=display.contentWidth-avatar.width-30,
-        height=display.contentHeight/3 - 50,
-        fontSize=16
+        height=display.contentHeight/3,
+        fontSize=15
     })
     textbox.anchorX = 0
     textbox.anchorY = 0

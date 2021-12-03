@@ -37,9 +37,6 @@ function scene:create( event )
  
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
- 
-    local bgm = BGM:new()
-    bgm:play( "music/sclubparty.mp3" )
 
     local world = createWorld(sceneGroup)
     self.world = world
@@ -85,7 +82,7 @@ function scene:create( event )
                 composer.setVariable("haveRupaulEndorsement",true)
                 async.waterfall({
                     function(next) nena:moveTo(72,38,next) end,
-                    function(next) msg(nena, "Hi Run! Can you please let me record you giving an endorsement for Redbox Mac n Cheese?", next) end,
+                    function(next) msg(nena, "Hi Ru! Can you please let me record you giving an endorsement for Redbox Mac n Cheese?", next) end,
                     function(next) msg(rupaul, "Sure - Let's do it!", next) end,
                     function(next) msg(nena, "Thank you so much!",next) end,
                 })
@@ -470,6 +467,9 @@ function scene:show( event )
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
  
+        local bgm = BGM:new()
+        bgm:play( "music/toxic.mp3" )
+        
         composer.setVariable( "lastScene", "daveandbusters" )
     end
 

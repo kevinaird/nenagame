@@ -28,16 +28,28 @@ function BGM:play(fname)
             else next() end 
         end,
         function(next)
-            self.handle = audio.loadStream( fname )
-            self.channel = audio.play( self.handle )
-            audio.setVolume(0.7,{ channel=self.channel })
-            self.currentPlaying = fname
+            local function play(fname,this)
+                this.currentPlaying = fname
+                this.handle = audio.loadStream( fname )
+                this.channel = audio.play( this.handle, { 
+                    onComplete=function() 
+                        if this.currentPlaying == fname then 
+                            play(fname,this) 
+                        end
+                    end 
+                } )
+                audio.setVolume(0.7,{ channel=this.channel })
+                print("BGM play fn fname="..fname)
+                print("BGM play fn channel="..this.channel)
+            end
+            play(fname,self)
         end,
     })
 end
 
 function BGM:stop(cb) 
     local t = 1000
+    print("BGM stop "..self.currentPlaying)
     audio.fadeOut(t)
     self.currentPlaying = ""
     if cb then timer.performWithDelay(t,function() cb() end); end

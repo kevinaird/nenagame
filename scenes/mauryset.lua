@@ -39,9 +39,6 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local bgm = BGM:new()
-    bgm:play( "music/maury.mp3" )
-
     local world = createWorld(sceneGroup)
     self.world = world
 
@@ -556,6 +553,9 @@ function scene:show( event )
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
 
+        local bgm = BGM:new()
+        bgm:play( "music/maury.mp3" )
+    
         if not composer.getVariable("tookLieDetectorResults") then 
             self.mauryTable.sprite:setSequence( "stand" )
             self.mauryTable.sprite:play()

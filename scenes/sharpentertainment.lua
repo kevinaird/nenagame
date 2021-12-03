@@ -38,9 +38,6 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local bgm = BGM:new()
-    bgm:play( "music/sclubparty.mp3" )
-
     local world = createWorld(sceneGroup)
     self.world = world
 
@@ -77,7 +74,7 @@ function scene:create( event )
     matt = Character:new(world,map,{
         name="Matt Sharp",
         avatar="art/matt.png",
-        spec=defaultChar,
+        spec=require("characters.matt"),
         startX=79,
         startY=40,
         actions={
@@ -92,7 +89,7 @@ function scene:create( event )
                     function(next) msg(matt,"........And the ratings went through the roof! You're a star!!",next) end,
                     function(next) msg(nena,"Well... obvy!",next) end,
                     function(next) msg(matt,"You and you're oodie are a hit!!! A hit I say!! You must let me cast you in one of my shows!",next) end,
-                    function(next) msg(matt,"Which one do you like best? Pet Psychic Encounters? Lady Hoggers? Celerity Nightmares Decoded?",next) end,
+                    function(next) msg(matt,"Which one do you like best? Pet Psychic Encounters? Lady Hoggers? Celebrity Nightmares Decoded?",next) end,
                     function(next) msg(nena,"My favourite is the one you just cancelled! 90 day MAFS-Fish after lockup AU!!",next) end,
                     function(next) msg(matt,"Done! I'm uncancelling the show and casting you in it right away!!!",next) end,
                     function(next)
@@ -155,6 +152,9 @@ function scene:show( event )
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
  
+        local bgm = BGM:new()
+        bgm:play( "music/sclubparty.mp3" )
+    
         composer.setVariable( "lastScene", "sharpentertainment" )
     end
 

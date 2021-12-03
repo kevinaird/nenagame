@@ -39,9 +39,6 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local bgm = BGM:new()
-    bgm:play( "music/sclubparty.mp3" )
-
     local world = createWorld(sceneGroup)
     self.world = world
 
@@ -231,6 +228,9 @@ function scene:show( event )
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
  
+        local bgm = BGM:new()
+        bgm:play( "music/sclubparty.mp3" )
+    
         composer.setVariable( "lastScene", "bathroom" )
     end
 

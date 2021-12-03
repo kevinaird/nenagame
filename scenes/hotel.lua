@@ -38,9 +38,6 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local bgm = BGM:new()
-    bgm:play( "music/sclubparty.mp3" )
-
     local world = createWorld(sceneGroup)
     self.world = world
 
@@ -201,7 +198,7 @@ function scene:create( event )
                                                 function(next) msg(phoebe, "Sorry. I only give endorsements to help the show.",next) end, 
                                                 function(next) msg(phoebe, "If you would like to support the show please visit this is criminal dot com slash merch.", next) end,
                                                 function(next) msg(nena, "Is there anything else I can do to help the show in exchange for an endorsement?",next) end,
-                                                function(next) msg(phoebe, "Well we're really struggling to find our next quriky crime story. If you find one let me know!",next) end,
+                                                function(next) msg(phoebe, "Well we're really struggling to find our next quirky crime story. If you find one let me know!",next) end,
                                                 function(next) showOptions() end,
                                             })
                                         else
@@ -319,6 +316,9 @@ function scene:show( event )
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
  
+        local bgm = BGM:new()
+        bgm:play( "music/sclubparty.mp3" )
+    
         composer.setVariable( "lastScene", "hotel" )
     end
 

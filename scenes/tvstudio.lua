@@ -37,9 +37,6 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local bgm = BGM:new()
-    bgm:play( "music/sclubparty.mp3" )
-
     local world = createWorld(sceneGroup)
     self.world = world
 
@@ -74,8 +71,8 @@ function scene:create( event )
 
     security = Character:new(world,map,{
         name="Security",
-        spec=defaultChar,
-        avatar="art/avatar1.png",
+        spec=require("characters.guard"),
+        avatar="art/guard.png",
         startX=52,
         startY=26,
         actions={
@@ -334,6 +331,10 @@ function scene:show( event )
  
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
+
+        local bgm = BGM:new()
+        bgm:play( "music/sclubparty.mp3" )
+
         if (lastScene == "hotelbridge") then
             nena:moveTo(101,32)
         end

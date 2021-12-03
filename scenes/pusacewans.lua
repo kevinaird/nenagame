@@ -39,9 +39,6 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local bgm = BGM:new()
-    bgm:play( "music/sclubparty.mp3" )
-
     local world = createWorld(sceneGroup)
     self.world = world
 
@@ -106,6 +103,7 @@ function scene:create( event )
             Talk=function()
                 async.waterfall({
                     function(next) nena:moveTo(114,50,next) end,
+                    function(next) nena:setFacing(-1) next() end,
                     function(next) msg(clerk,"Welcome to PusaCewans! How may I help you today?.",next) end,
                     function(next) 
                         local function showOptions()
@@ -231,6 +229,7 @@ function scene:create( event )
             end,
         }
     })
+    self.clerk = clerk
 
     player = Player:new(world,map,nena)
 
@@ -380,12 +379,16 @@ function scene:show( event )
         -- Code here runs when the scene is still off screen (but is about to come on screen)
         nena = self.nena
         world = self.world
+        clerk = self.clerk
         
         self.nena:reinit()
  
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
 
+        local bgm = BGM:new()
+        bgm:play( "music/sclubparty.mp3" )
+    
         if not composer.getVariable("visitedPusacewans") then
             composer.setVariable("visitedPusacewans",true);
             async.waterfall({

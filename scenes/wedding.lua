@@ -38,9 +38,6 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    bgm = BGM:new()
-    bgm:play( "music/IntoTheMystic.mp3" )
-
     local world = createWorld(sceneGroup)
     self.world = world
 
@@ -112,6 +109,9 @@ function scene:show( event )
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
  
+        bgm = BGM:new()
+        bgm:play( "music/IntoTheMystic.mp3" )
+    
         composer.setVariable( "lastScene", "wedding" )
         Runtime:dispatchEvent( { name="dialogOpen" } )
 
@@ -152,8 +152,10 @@ function scene:show( event )
                 transition.to(blackness, { time=500, alpha=1, onComplete=function() next() end})
             end,
             -- 1. Slide show of our pics
+            function(next) bgm:play( "music/Foreigner.mp3" ) next() end,
             function(next) cutscene("NenaAndKev.MP4",false,next) end,
             -- 2. Yammy fake out video
+            function(next) bgm:stop(next) end,
             function(next) 
                 yammySheet = graphics.newImageSheet( "art/yammy.png", {
                     width = 505,

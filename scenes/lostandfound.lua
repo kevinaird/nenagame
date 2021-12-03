@@ -38,9 +38,6 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
  
-    local bgm = BGM:new()
-    bgm:play( "music/sclubparty.mp3" )
-
     local world = createWorld(sceneGroup)
     self.world = world
 
@@ -253,6 +250,7 @@ function scene:create( event )
             end
         }
     })
+    self.clerk = clerk
 
     Inventory:new()
 end
@@ -269,12 +267,16 @@ function scene:show( event )
         -- Code here runs when the scene is still off screen (but is about to come on screen)
         nena = self.nena
         world = self.world
+        clerk = self.clerk
  
         self.nena:reinit()
 
     elseif ( phase == "did" ) then
         -- Code here runs when the scene is entirely on screen
  
+        local bgm = BGM:new()
+        bgm:play( "music/sclubparty.mp3" )
+    
         composer.setVariable( "lastScene", "lostandfound" )
     end
 
