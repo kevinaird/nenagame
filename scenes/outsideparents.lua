@@ -200,7 +200,7 @@ function scene:show( event )
             nena:setXY(83,60)
         end
 
-        if not composer.getVariable("knowsMAFSCancelled") and not composer.getVariable("needsIDProof") then
+        if (not composer.getVariable("knowsMAFSCancelled") and not composer.getVariable("needsIDProof")) or Inventory:hasItem("Wallet") then
             self.dad:setXY(33,66)
         else
             self.dad:setXY(-99,66)

@@ -115,6 +115,19 @@ function scene:create( event )
                                     })
                                 end
                             })
+                            local attempts = composer.getVariable("craneGameAttempts")
+                            if attempts > 1 and attempts < 3 then 
+                                table.insert(choices, { 
+                                    label="Ask about Crane Game", 
+                                    fn=function() 
+                                        async.waterfall({
+                                            function(next) msg(nena, "Do you know how I win the crane game?", next) end,
+                                            function(next) msg(rupaul, "Try once, try twice and then try one more time! That usually does it", next) end,
+                                            function(next) showOptions() end,
+                                        })
+                                    end
+                                });
+                            end
                             if composer.getVariable("knowsSnacksAreMissing") and not Inventory:hasItem("Mac N Cheese")  then
                                 table.insert(choices, { 
                                     label="Ask about Redbox Mac n Cheese", 
@@ -469,7 +482,7 @@ function scene:show( event )
  
         local bgm = BGM:new()
         bgm:play( "music/toxic.mp3" )
-        
+
         composer.setVariable( "lastScene", "daveandbusters" )
     end
 

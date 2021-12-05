@@ -230,7 +230,11 @@ function scene:show( event )
             end,
             -- The End!
             function(next) msg(kevin,"Woohhooooo!!!!",next) end,
-            function(next) composer.gotoScene("scenes.startup") end,
+            function(next) 
+                blackness.alpha=0
+                Runtime:dispatchEvent( { name="dialogOpen" } )
+                composer.gotoScene("scenes.startup") 
+            end,
         })
     end
 

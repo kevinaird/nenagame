@@ -139,7 +139,7 @@ function scene:create( event )
                                     label="Ask about Lie Detector", 
                                     fn=function() 
                                         async.waterfall({
-                                            function(next) msg(nena, "So why do you need to prevent lie detector results from being released", next) end,
+                                            function(next) msg(nena, "So why do you need to prevent the lie detector results from being released?", next) end,
                                             function(next) msg(britney, "It's a long story! Involving my friend Susan the psychic medium", next) end,
                                             function(next) msg(britney, "She said \"ya'll have to get those results\" So thats what I'm doing!", next) end,
                                             function(next) showOptions() end,
@@ -164,7 +164,7 @@ function scene:create( event )
                                                 function(next) msg(nena, "If I get the results for you - Will you trade them for the key card?", next) end,
                                                 function(next) msg(britney, "Absolutely! OMG I just came up with a plan for how to get the results!", next) end,
                                                 function(next) msg(britney, "I can't go into Maury's studo because everyone would recognize me!", next) end,
-                                                function(next) msg(britney, "You may stand out a little - I mean since your wearing an oodie. But maybe you can get them for me!!!", next) end,
+                                                function(next) msg(britney, "You may stand out a little - I mean since you're wearing an oodie. But maybe you can get them for me!!!", next) end,
                                                 function(next) msg(nena, "OK - leave it to me!", next) end,
                                                 function(next) showOptions() end,
                                             })

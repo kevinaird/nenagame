@@ -68,7 +68,7 @@ function dialog(who, text, nextFn)
 
         textbox.text = ("%s%s "):format(textbox.text,word)
         transition.to(textbox,{
-            time=150,
+            time=115,
             onComplete=function()
                 loopOverWords(idx + 1)
             end

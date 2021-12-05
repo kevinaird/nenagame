@@ -105,26 +105,26 @@ function scene:create( event )
         startY=28,
         actions={
             Look=function() 
-                msg("OMG It's Neve - One of the hosts of 90 day MAFS-Fish")
+                msg("OMG It's Nev - One of the hosts of 90 day MAFS-Fish")
             end,
             Talk=function() 
                 if composer.getVariable("neveDistractSecurity") then
-                    return msg("I shouldn't distract Neve right now")
+                    return msg("I shouldn't distract Nev right now")
                 end
                 async.waterfall({
                     function(next) nena:moveTo(92,28,next) end,
                     function(next) nena:setFacing(1) next() end,
-                    function(next) msg("OMG Hi Neve!!",next) end,
+                    function(next) msg("OMG Hi Nev!!",next) end,
                     function(next) neve:setFacing(-1) next() end,
                     function(next) msg(neve,"Hi There!",next) end,
                     function(next) 
                         local function showOptions()
                             local choices = {}
                             table.insert(choices, { 
-                                label="Ask Neve what he's doing here", 
+                                label="Ask Nev what he's doing here", 
                                 fn=function()
                                     async.waterfall({
-                                        function(next) msg(nena, "What are you doing here Neve?", next) end,
+                                        function(next) msg(nena, "What are you doing here Nev?", next) end,
                                         function(next) msg(neve, "Just picking up my last pay check. As you may know 90 day MAFS-Fish after lockup AU has been cancelled sadly...", next) end,
                                         function(next) showOptions() end,
                                     })
@@ -134,14 +134,14 @@ function scene:create( event )
                                 label="Ask abouts MAFS-Fish being cancelled", 
                                 fn=function()
                                     async.waterfall({
-                                        function(next) msg(nena, "Neve how could 90 day MAFS-Fish after lockup AU be cancelled?!?! It's my favourie show of all time!!", next) end,
+                                        function(next) msg(nena, "Nev how could 90 day MAFS-Fish after lockup AU be cancelled?!?! It's my favourite show of all time!!", next) end,
                                         function(next) msg(neve, "I have no idea. That Matt Sharp guy is a real jerk. There's no convincing him.", next) end,
                                         function(next) showOptions() end,
                                     })
                                 end
                             });
                             table.insert(choices, { 
-                                label="Ask Neve where's Cammy", 
+                                label="Ask Nev where's Cammy", 
                                 fn=function()
                                     async.waterfall({
                                         function(next) msg(nena, "Where's Cammy?", next) end,
@@ -151,22 +151,22 @@ function scene:create( event )
                                 end
                             });
                             table.insert(choices, { 
-                                label="Ask Neve where's Max", 
+                                label="Ask Nev where's Max", 
                                 fn=function()
                                     async.waterfall({
                                         function(next) msg(nena, "Where's Max?", next) end,
-                                        function(next) msg(neve, "He's actually working on a movie deal with Max Milk right now", next) end,
+                                        function(next) msg(neve, "He's actually working on a movie deal for a script he wrote about a DJ who gets mislead by someone he met online.", next) end,
                                         function(next) showOptions() end,
                                     })
                                 end
                             });
                             if composer.getVariable("britPlanIsSet") and not composer.getVariable("neveDistractSecurity") then 
                                 table.insert(choices, { 
-                                    label="Ask Neve to distract the security guard", 
+                                    label="Ask Nev to distract the security guard", 
                                     fn=function()
                                         composer.setVariable("neveDistractSecurity",true)
                                         async.waterfall({
-                                            function(next) msg(nena, "Neve I have an elaborate plan to confront Matt Sharp and uncancel MAFS-Fish!!", next) end,
+                                            function(next) msg(nena, "Nev I have an elaborate plan to confront Matt Sharp and uncancel MAFS-Fish!!", next) end,
                                             function(next) msg(nena, "Step 1. You distract the guard", next) end,
                                             function(next) msg(nena, "Step 2. I break into the Maury set and steal the lie detector results", next) end,
                                             function(next) msg(nena, "Step 3. Brittney Spears trades the lie detector results for a key card to Matt Sharps office", next) end,

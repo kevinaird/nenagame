@@ -80,6 +80,7 @@ function scene:create( event )
             if item.name=="Video Camera" and composer.getVariable("needsMacNCheeseEndorsements") and composer.getVariable("haveVladEndorsement") and composer.getVariable("havePhoebeEndorsement") and composer.getVariable("haveRupaulEndorsement") then 
                 async.waterfall({
                     function(next) nena:moveTo(114,50,next) end,
+                    function(next) nena:setFacing(-1) next() end,
                     function(next) msg("Here you go - I have 3 celebrity endorsements recorded for Redbox Mac n Cheese!",next) end,
                     function(next) msg(clerk,"Amazing! This is just what I need to convince Mark PusaCewan!",next) end,
                     function(next) msg(clerk,"None of the celebrities are dentists right?",next) end,

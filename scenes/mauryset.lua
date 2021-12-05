@@ -652,7 +652,7 @@ function scene:show( event )
                 function(next) nena:moveTo(68,38,next) end,
                 function(next) msg(maury,"Welcome back to another episode of Maury! Today we have quite a situation unfolding",next) end,
                 function(next) msg(maury,"David and Annie are a couple who got married after 90 days on the K1 visa",next) end,
-                function(next) msg(maury,"and Lamar and Andrea are couple who found love together after Lamar came home from several years locked up!",next) end,
+                function(next) msg(maury,"and Lamar and Andrea are a couple who found love together after Lamar came home from several years in prison!",next) end,
                 function(next) msg(maury,"And it looks like Annie and Lamar have a secret they want to tell David and Andrea!",next) end,
                 function(next) msg(david,"Say what?",next) end,
                 function(next) msg(andrea,"Lord jesus I pray for forgiveness cause I may have to cut a bitch",next) end,

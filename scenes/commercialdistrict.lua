@@ -246,6 +246,113 @@ function scene:create( event )
         }
     })
 
+    duate1 = Character:new(world,map,{
+        name="Duate",
+        avatar="art/duate.png",
+        spec=require("characters.duate"),
+        startX=260,
+        startY=125,
+        actions={
+            Look=function()
+                msg("It's my besty Duate!!")
+            end,
+            Talk=function() 
+                async.waterfall({
+                    function(next) nena:moveTo(252,125,next) end,
+                    function(next) nena:setFacing(1) duate1:setFacing(-1) next() end,
+                    function(next) msg("Hey Duate!",next) end,
+                    function(next) msg(duate1,"Hey Neens!",next) end,
+                    function(next) 
+                        local function showOptions()
+                            local choices = {}
+        
+                            table.insert(choices, { 
+                                label="Ask Duate what she's doing", 
+                                fn=function() 
+                                    async.waterfall({
+                                        function(next) msg(nena, "What are you doing today Duate?", next) end,
+                                        function(next) msg(duate1, "I'm meeting up with Noah to go buy more plants! I NEED MORE PLANTS!!", next) end,
+                                        function(next) showOptions() end,
+                                    })
+                                end
+                            });
+                            if composer.getVariable("walletIsMissing") and not Inventory:hasItem("Wallet") then
+                                table.insert(choices, { 
+                                    label="Ask about Wallet", 
+                                    fn=function() 
+                                        async.waterfall({
+                                            function(next) msg(nena, "Duate! My wallet is missing!", next) end,
+                                            function(next) msg(duate1, "Again!? You should check the lost property office.. Maybe someone found it and brought it there", next) end,
+                                            function(next) showOptions() end,
+                                        })
+                                    end
+                                });
+                            end
+                            if composer.getVariable("knowsSnacksAreMissing") and not Inventory:hasItem("J Lohr")  then
+                                table.insert(choices, { 
+                                    label="Ask about J Lohr", 
+                                    fn=function() 
+                                        async.waterfall({
+                                            function(next) msg(nena, "Do you know where I can get a bottle of J Lohr?", next) end,
+                                            function(next) msg(duate1, "The LCBO? It might be closed though...", next) end,
+                                            function(next) showOptions() end,
+                                        })
+                                    end
+                                });
+                            end
+                            if composer.getVariable("knowsSnacksAreMissing") and not Inventory:hasItem("Truffle Chips")  then
+                                table.insert(choices, { 
+                                    label="Ask about Truffle Chips", 
+                                    fn=function() 
+                                        async.waterfall({
+                                            function(next) msg(nena, "Do you know where I can get a bag of Truffle Chips?", next) end,
+                                            function(next) msg(duate1, "I love truffle chips! Try PusaCewans!", next) end,
+                                            function(next) showOptions() end,
+                                        })
+                                    end
+                                });
+                            end
+                            if composer.getVariable("amberWantsOodie") and not Inventory:hasItem("Extra Oodie") then
+                                table.insert(choices, { 
+                                    label="Ask about an Oodie", 
+                                    fn=function() 
+                                        async.waterfall({
+                                            function(next) msg(nena, "Do you know where I can find an extra oodie?", next) end,
+                                            function(next) msg(duate1, "I don't.. I see you're already wearing one out and about...", next) end,
+                                            function(next) msg(nena, "Don't worry - It's an outdoor oodie!", next) end,
+                                            function(next) msg(duate1, "...It's a look.", next) end,
+                                            function(next) showOptions() end,
+                                        })
+                                    end
+                                });
+                            end
+                            if composer.getVariable("knowsSnacksAreMissing") and not Inventory:hasItem("Mac N Cheese")  then
+                                table.insert(choices, { 
+                                    label="Ask about Redbox Mac n Cheese", 
+                                    fn=function()
+                                        async.waterfall({
+                                            function(next) msg(nena, "Do you know where I can find Redbox Mac n Cheese?", next) end,
+                                            function(next) msg(duate1, "Hmmm.... Maybe PusaCewans?", next) end,
+                                            function(next) showOptions() end,
+                                        })
+                                    end
+                                });
+                            end
+                            table.insert(choices, { 
+                                label="That's all", 
+                                fn=function() next() end
+                            });
+        
+                            options(choices,next)
+                        end
+                        showOptions()
+                    end,
+                })
+            end
+        }
+    })
+    self.duate = duate1
+
     Inventory:new()
 end
  
@@ -264,6 +371,12 @@ function scene:show( event )
         world = self.world
         
         self.nena:reinit()
+
+        if not composer.getVariable("knowsMAFSCancelled") then
+            self.duate:setXY(260,125)
+        else
+            self.duate:setXY(-99,57)
+        end
 
         if ( lastScene == "park") then
             nena:setXY(3,123)

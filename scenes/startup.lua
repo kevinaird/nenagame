@@ -55,6 +55,8 @@ function scene:create( event )
         function(next)
             rect:addEventListener("touch", function() 
                 if menuIsShowing then return end
+                txt.alpha = 0
+                txt.text = ""
                 next("Skip")
             end)
 

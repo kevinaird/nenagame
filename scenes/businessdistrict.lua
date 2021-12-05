@@ -80,6 +80,7 @@ function scene:create( event )
             Talk=function() 
                 async.waterfall({
                     function(next) nena:moveTo(28,124,next) end,
+                    function(next) nena:setFacing(1) next() end,
                     function(next) msg(bouncer,"Please move along ma'am",next) end,
                     function(next) 
                         if composer.getVariable("knowsMAFSCancelled") then 
@@ -208,6 +209,113 @@ function scene:create( event )
         }
     })
 
+    leah1 = Character:new(world,map,{
+        name="Leah",
+        avatar="art/leah.png",
+        spec=require("characters.leah"),
+        startX=131,
+        startY=137,
+        actions={
+            Look=function()
+                msg("It's my cousin and besty! Leah!!")
+            end,
+            Talk=function() 
+                async.waterfall({
+                    function(next) nena:moveTo(117,137,next) end,
+                    function(next) nena:setFacing(1) leah1:setFacing(-1) next() end,
+                    function(next) msg("Hey Leah!",next) end,
+                    function(next) msg(leah1,"Hey Neens!",next) end,
+                    function(next) 
+                        local function showOptions()
+                            local choices = {}
+        
+                            table.insert(choices, { 
+                                label="Ask Leah what she's doing", 
+                                fn=function() 
+                                    async.waterfall({
+                                        function(next) msg(nena, "What are you doing today Leah?", next) end,
+                                        function(next) msg(leah1, "I'm buying more gadgets for baby Shiloh!", next) end,
+                                        function(next) showOptions() end,
+                                    })
+                                end
+                            });
+                            if composer.getVariable("walletIsMissing") and not Inventory:hasItem("Wallet") then
+                                table.insert(choices, { 
+                                    label="Ask about Wallet", 
+                                    fn=function() 
+                                        async.waterfall({
+                                            function(next) msg(nena, "Leah! My wallet is missing!", next) end,
+                                            function(next) msg(leah1, "Oh dear... Didn't this happen before?",next) end,
+                                            function(next) msg(leah1, "Maybe check the lost and found? I heard the guy who works there is a problem though.", next) end,
+                                            function(next) showOptions() end,
+                                        })
+                                    end
+                                });
+                            end
+                            if composer.getVariable("knowsSnacksAreMissing") and not Inventory:hasItem("J Lohr")  then
+                                table.insert(choices, { 
+                                    label="Ask about J Lohr", 
+                                    fn=function() 
+                                        async.waterfall({
+                                            function(next) msg(nena, "Do you know where I can get a bottle of J Lohr?", next) end,
+                                            function(next) msg(leah1, "Probably the LCBO - Let me know if you need help drinking that bottle!", next) end,
+                                            function(next) showOptions() end,
+                                        })
+                                    end
+                                });
+                            end
+                            if composer.getVariable("knowsSnacksAreMissing") and not Inventory:hasItem("Truffle Chips")  then
+                                table.insert(choices, { 
+                                    label="Ask about Truffle Chips", 
+                                    fn=function() 
+                                        async.waterfall({
+                                            function(next) msg(nena, "Do you know where I can get a bag of Truffle Chips?", next) end,
+                                            function(next) msg(leah1, "I'm not sure.. I would think a fancy store like PusaCewans would have them.", next) end,
+                                            function(next) showOptions() end,
+                                        })
+                                    end
+                                });
+                            end
+                            if composer.getVariable("amberWantsOodie") and not Inventory:hasItem("Extra Oodie") then
+                                table.insert(choices, { 
+                                    label="Ask about an Oodie", 
+                                    fn=function() 
+                                        async.waterfall({
+                                            function(next) msg(nena, "Do you know where I can find an extra oodie?", next) end,
+                                            function(next) msg(leah1, "Extra? Like in addition to what you are wearing right now?", next) end,
+                                            function(next) msg(leah1, "I have no idea", next) end,
+                                            function(next) showOptions() end,
+                                        })
+                                    end
+                                });
+                            end
+                            if composer.getVariable("knowsSnacksAreMissing") and not Inventory:hasItem("Mac N Cheese")  then
+                                table.insert(choices, { 
+                                    label="Ask about Redbox Mac n Cheese", 
+                                    fn=function()
+                                        async.waterfall({
+                                            function(next) msg(nena, "Do you know where I can find Redbox Mac n Cheese?", next) end,
+                                            function(next) msg(leah1, "Try Pusacewans?", next) end,
+                                            function(next) showOptions() end,
+                                        })
+                                    end
+                                });
+                            end
+                            table.insert(choices, { 
+                                label="That's all", 
+                                fn=function() next() end
+                            });
+        
+                            options(choices,next)
+                        end
+                        showOptions()
+                    end,
+                })
+            end
+        }
+    })
+    self.leah = leah1
+
     Inventory:new()
 end
  
@@ -230,6 +338,12 @@ function scene:show( event )
         if not composer.getVariable("gotCamera") then
             videoCameraItem:enable()
             videoCameraPic.isVisible = true
+        end
+
+        if not composer.getVariable("knowsMAFSCancelled") then
+            self.leah:setXY(131,137)
+        else
+            self.leah:setXY(-99,57)
         end
 
         if ( lastScene == "commercialdistrict") then

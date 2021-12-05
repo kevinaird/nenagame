@@ -119,6 +119,112 @@ function scene:create( event )
         }
     })
 
+    laura1 = Character:new(world,map,{
+        name="Laura",
+        avatar="art/laura.png",
+        spec=require("characters.laura"),
+        startX=142,
+        startY=61,
+        actions={
+            Look=function()
+                msg("It's my besty Laura!!")
+            end,
+            Talk=function() 
+                async.waterfall({
+                    function(next) nena:moveTo(133,61,next) end,
+                    function(next) nena:setFacing(1) laura1:setFacing(-1) next() end,
+                    function(next) msg("Hey Laura!",next) end,
+                    function(next) msg(laura1,"Hey Neens!",next) end,
+                    function(next) 
+                        local function showOptions()
+                            local choices = {}
+        
+                            table.insert(choices, { 
+                                label="Ask Laura what she's doing", 
+                                fn=function() 
+                                    async.waterfall({
+                                        function(next) msg(nena, "What are you doing today Laura?", next) end,
+                                        function(next) msg(laura1, "I'm on my way to the pet store to get something for Sheila!", next) end,
+                                        function(next) showOptions() end,
+                                    })
+                                end
+                            });
+                            if composer.getVariable("walletIsMissing") and not Inventory:hasItem("Wallet") then
+                                table.insert(choices, { 
+                                    label="Ask about Wallet", 
+                                    fn=function() 
+                                        async.waterfall({
+                                            function(next) msg(nena, "Laura! My wallet is missing!", next) end,
+                                            function(next) msg(laura1, "Oh no! You should go to the lost and found!", next) end,
+                                            function(next) showOptions() end,
+                                        })
+                                    end
+                                });
+                            end
+                            if composer.getVariable("knowsSnacksAreMissing") and not Inventory:hasItem("J Lohr")  then
+                                table.insert(choices, { 
+                                    label="Ask about J Lohr", 
+                                    fn=function() 
+                                        async.waterfall({
+                                            function(next) msg(nena, "Do you know where I can get a bottle of J Lohr?", next) end,
+                                            function(next) msg(laura1, "I'm not sure. At this time the LCBO is probably closed.", next) end,
+                                            function(next) showOptions() end,
+                                        })
+                                    end
+                                });
+                            end
+                            if composer.getVariable("knowsSnacksAreMissing") and not Inventory:hasItem("Truffle Chips")  then
+                                table.insert(choices, { 
+                                    label="Ask about Truffle Chips", 
+                                    fn=function() 
+                                        async.waterfall({
+                                            function(next) msg(nena, "Do you know where I can get a bag of Truffle Chips?", next) end,
+                                            function(next) msg(laura1, "I bet PusaCewans have them!", next) end,
+                                            function(next) showOptions() end,
+                                        })
+                                    end
+                                });
+                            end
+                            if composer.getVariable("amberWantsOodie") and not Inventory:hasItem("Extra Oodie") then
+                                table.insert(choices, { 
+                                    label="Ask about an Oodie", 
+                                    fn=function() 
+                                        async.waterfall({
+                                            function(next) msg(nena, "Do you know where I can find an extra oodie?", next) end,
+                                            function(next) msg(laura1, "Well first of all the Oodie you are wearing is amazing.", next) end,
+                                            function(next) msg(laura1, "In fact - I was going to ask you where you got yours!", next) end,
+                                            function(next) showOptions() end,
+                                        })
+                                    end
+                                });
+                            end
+                            if composer.getVariable("knowsSnacksAreMissing") and not Inventory:hasItem("Mac N Cheese")  then
+                                table.insert(choices, { 
+                                    label="Ask about Redbox Mac n Cheese", 
+                                    fn=function()
+                                        async.waterfall({
+                                            function(next) msg(nena, "Do you know where I can find Redbox Mac n Cheese?", next) end,
+                                            function(next) msg(laura1, "Probably any grocery store.. I think Pusacewans isn't far from here", next) end,
+                                            function(next) showOptions() end,
+                                        })
+                                    end
+                                });
+                            end
+                            table.insert(choices, { 
+                                label="That's all", 
+                                fn=function() next() end
+                            });
+        
+                            options(choices,next)
+                        end
+                        showOptions()
+                    end,
+                })
+            end
+        }
+    })
+    self.laura = laura1
+
     Inventory:new()
 end
  
@@ -137,6 +243,12 @@ function scene:show( event )
         world = self.world
 
         self.nena:reinit()
+
+        if not composer.getVariable("knowsMAFSCancelled") then
+            self.laura:setXY(142,61)
+        else
+            self.laura:setXY(-99,57)
+        end
 
         if ( lastScene == "outsideparents") then
             nena:setXY(8,60)
