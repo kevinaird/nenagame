@@ -211,6 +211,7 @@ function scene:create( event )
                 composer.setVariable("vladdyNotHangry",true)
                 async.waterfall({
                     function(next) nena:moveTo(58,39,next) end,
+                    function(next) nena:setFacing(-1) next() end,
                     function(next) msg(nena, "Hi Vladdy - Would you like a churro?", next) end,
                     function(next) msg(vladdy, "...", next) end,
                     function(next) msg(translator, "OMG - Vladdy loves Churros!!! Thank you so much!", next) end,
@@ -220,6 +221,7 @@ function scene:create( event )
                 composer.setVariable("haveVladEndorsement",true)
                 async.waterfall({
                     function(next) nena:moveTo(58,39,next) end,
+                    function(next) nena:setFacing(-1) next() end,
                     function(next) msg(nena, "Hi Vladdy - Can you please let me record you giving an endorsement for Redbox Mac n Cheese?", next) end,
                     function(next) msg(translator, "OK - He's ready!", next) end,
                     function(next) msg(vladdy, "...", next) end,
@@ -228,6 +230,7 @@ function scene:create( event )
             elseif item.name=="Video Camera" and composer.getVariable("haveVladEndorsement") then
                 async.waterfall({
                     function(next) nena:moveTo(58,39,next) end,
+                    function(next) nena:setFacing(-1) next() end,
                     function(next) msg(nena, "Thanks for the endorsement vladdy!", next) end,
                 })
             else

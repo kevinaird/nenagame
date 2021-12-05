@@ -64,7 +64,7 @@ function scene:create( event )
         startY=60,
         giveItemTo=function(item)
             if require("items.global")(item) then return end
-            msg("I already have this123!")
+            msg("I already have this!")
         end
     })
     self.nena = nena
@@ -185,7 +185,7 @@ function scene:create( event )
                                     end
                                 });
                             end
-                            if composer.getVariable("amberWantsOodie") and not Inventory:hasItem("Extra Oodie") then
+                            if composer.getVariable("amberWantsOodie") and not Inventory:hasItem("Extra Oodie") and not Inventory:hasItem("J Lohr")  then
                                 table.insert(choices, { 
                                     label="Ask about an Oodie", 
                                     fn=function() 

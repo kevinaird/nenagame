@@ -110,6 +110,7 @@ function scene:create( event )
             Talk=function() 
                 async.waterfall({
                     function(next) nena:moveTo(122,125,next) end,
+                    function(next) nena:setFacing(1) bellhop:setFacing(-1) next() end,
                     function(next) msg(nena,"Hello!",next) end,
                     function(next) msg(bellhop,"Hello ma'am",next) end,
                     function(next) 
@@ -276,7 +277,7 @@ function scene:create( event )
                                     end
                                 });
                             end
-                            if composer.getVariable("amberWantsOodie") and not Inventory:hasItem("Extra Oodie") then
+                            if composer.getVariable("amberWantsOodie") and not Inventory:hasItem("Extra Oodie") and not Inventory:hasItem("J Lohr")  then
                                 table.insert(choices, { 
                                     label="Ask about an Oodie", 
                                     fn=function() 

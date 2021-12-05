@@ -108,11 +108,11 @@ function scene:create( event )
         startY=51*0.6,
         giveItemTo=function(item)
             if require("items.global")(item) then return end
-            if item.name == "Tile" then
+            if item.name == "Tile" and not Inventory:hasItem("Keys") then
                 if composer.getVariable("tileHasBattery") then
-                    audio.pause()
-                    local backgroundMusic = audio.loadStream( "music/tile.mp3" )
-                    audio.play( backgroundMusic )
+                    
+                    local bgm = BGM:new()
+                    bgm:play( "music/tile.mp3" )
                     composer.setVariable("tilePlaying",true)
 
                     msg("The tile music seems to be coming from the right side of the room!")
@@ -460,10 +460,9 @@ function scene:create( event )
                                 function(next) msg("Wait.. This is where the tile music is coming from!",next) end,
                                 function(next) msg("It's my spare keys to my parents house!",next) end,
                                 function(next) Inventory:addItem(keys,next) end,
-                                function(next) 
-                                    audio.pause()
-                                    local backgroundMusic = audio.loadStream( "music/sclubparty.mp3" )
-                                    audio.play( backgroundMusic )
+                                function(next)                                     
+                                    local bgm = BGM:new()
+                                    bgm:play( "music/sclubparty.mp3" )
                                 end
                             })
                         end
