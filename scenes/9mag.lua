@@ -244,6 +244,7 @@ function scene:create( event )
             end,
         }
     })
+    self.van = van
 
     door = Interactable:new(world,{
         name="exit",
@@ -403,9 +404,12 @@ function scene:show( event )
     if ( phase == "will" ) then
         -- Code here runs when the scene is still off screen (but is about to come on screen)
         nena = self.nena
+        van = self.van
         world = self.world
  
         self.nena:reinit()
+        self.van:reinit()
+
         van:setXY(27,39)
         composer.setVariable("vanLeft",false)
 
@@ -437,6 +441,7 @@ function scene:hide( event )
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
         if self.nena then self.nena:deinit() end
+        if self.van then self.van:deinit() end
  
     end
 end

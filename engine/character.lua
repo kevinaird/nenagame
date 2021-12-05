@@ -88,6 +88,9 @@ function Character:new(world, map, opts)
     -- ensure collision object always follows sprite everywhere
     local collision = o.collision
     function collision:enterFrame(event)
+        --if self.name ~= "player" then
+        --    print(("collision:enterFrame %s x=%d y=%d"):format(self.name,self.x,self.y))
+        --end
         self.x, self.y = self.attachedTo.x, self.attachedTo.y
         self.xScale, self.yScale = self.attachedTo.xScale, self.attachedTo.yScale
     end
@@ -119,6 +122,7 @@ function Character:reinit()
     Runtime:addEventListener("giveItemTo",self.collision)
     Runtime:addEventListener("enterFrame", self.collision)
     self.hasInit = true
+    print("Character reinit "..self.name)
 end
 
 function Character:deinit() 
@@ -126,6 +130,7 @@ function Character:deinit()
     Runtime:removeEventListener("giveItemTo",self.collision)
     Runtime:removeEventListener("enterFrame", self.collision)
     self.hasInit = false
+    print("Character deinit "..self.name)
 end
 
 function Character:removeSelf() 

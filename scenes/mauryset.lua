@@ -532,6 +532,14 @@ function scene:show( event )
         world = self.world
  
         self.nena:reinit()
+        self.security1:reinit()
+        self.security2:reinit()
+        self.david:reinit()
+        self.annie:reinit()
+        self.andrea:reinit()
+        self.lamar:reinit()
+        self.maury:reinit()
+
         self.nena:setXY(75,38)
 
         self.security1:setXY(-10,36)
@@ -576,7 +584,7 @@ function scene:show( event )
                                 async.waterfall({
                                     function(next) msg(nena,"I'm a new security guard!",next) end,
                                     function(next) msg(maury,"Oh ok. They really are getting relaxed with the dress code for you guys. Can you come back when.. I mean if.. a fight breaks out? Thanks",next) end, 
-                                    function(next) nena:moveTo(75,38,next) end,
+                                    function(next) nena:moveTo1(75,38,false,next) end,
                                     function(next) composer.gotoScene( "scenes.tvstudio" ) end,
                                 })
                             end
@@ -587,7 +595,7 @@ function scene:show( event )
                                 async.waterfall({
                                     function(next) msg(nena,"I'm the sexy decoy!",next) end,
                                     function(next) msg(maury,"Oh ok. But the sexy decoy isn't needed until the next story. Can you come back then? Thanks",next) end, 
-                                    function(next) nena:moveTo(75,38,next) end,
+                                    function(next) nena:moveTo1(75,38,false,next) end,
                                     function(next) composer.gotoScene( "scenes.tvstudio" ) end,
                                 })
                             end
@@ -598,7 +606,7 @@ function scene:show( event )
                                 async.waterfall({
                                     function(next) msg(nena,"I'm a new producer!",next) end,
                                     function(next) msg(maury,"Oh ok. Can you come back after the show finishes taping? I'll introduce you to everyone who works on the show! Thanks",next) end, 
-                                    function(next) nena:moveTo(75,38,next) end,
+                                    function(next) nena:moveTo1(75,38,false,next) end,
                                     function(next) composer.gotoScene( "scenes.tvstudio" ) end,
                                 })
                             end
@@ -629,7 +637,7 @@ function scene:show( event )
                                 async.waterfall({
                                     function(next) msg(nena,"I'm the new studio host therapist",next) end,
                                     function(next) msg(maury,"It's about time! I really need help doc. But can you come back at the commercial break? Thanks",next) end,                                    
-                                    function(next) nena:moveTo(75,38,next) end,
+                                    function(next) nena:moveTo1(75,38,false,next) end,
                                     function(next) composer.gotoScene( "scenes.tvstudio" ) end,
                                 })
                             end
@@ -641,7 +649,7 @@ function scene:show( event )
 
         if composer.getVariable("notFirstTimeOnMaurySet") then 
             async.waterfall({
-                function(next) nena:moveTo(68,38,next) end,
+                function(next) nena:moveTo1(68,38,false,next) end,
                 function(next) msg(maury,"David tell us how it felt went Annie cheated on you with Lamar!",next) end,
                 function(next) msg(david,"Not very good at all!",next) end,
                 function(next) mauryAsksNena() end,
@@ -649,7 +657,7 @@ function scene:show( event )
         else 
             composer.setVariable("notFirstTimeOnMaurySet",true)
             async.waterfall({
-                function(next) nena:moveTo(68,38,next) end,
+                function(next) nena:moveTo1(68,38,false,next) end,
                 function(next) msg(maury,"Welcome back to another episode of Maury! Today we have quite a situation unfolding",next) end,
                 function(next) msg(maury,"David and Annie are a couple who got married after 90 days on the K1 visa",next) end,
                 function(next) msg(maury,"and Lamar and Andrea are a couple who found love together after Lamar came home from several years in prison!",next) end,
@@ -677,7 +685,14 @@ function scene:hide( event )
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
         if self.nena then self.nena:deinit() end
- 
+        if self.maury then self.maury:deinit() end
+        if self.david then self.david:deinit() end
+        if self.annie then self.annie:deinit() end
+        if self.andrea then self.andrea:deinit() end
+        if self.lamar then self.lamar:deinit() end
+        if self.security1 then self.security1:deinit() end
+        if self.security2 then self.security2:deinit() end
+        
     end
 end
  

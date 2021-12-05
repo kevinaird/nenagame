@@ -249,7 +249,7 @@ function scene:create( event )
                             async.waterfall({
                                 function(next) msg(clerk,"Excuse me... Lady in the large oversized oodie... You have to pay for those chips",next) end,
                                 function(next) msg("Oh right... I'll put them back.",next) end,
-                                function(next) nena:moveTo(125,45,next) end,
+                                function(next) nena:moveTo1(125,45,false,next) end,
                                 function(next) Inventory:removeItem(truffeChips,next) end,
                             })
                         else

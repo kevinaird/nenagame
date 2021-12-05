@@ -69,8 +69,8 @@ function scene:create( event )
 
     player = Player:new(world,map,nena)
 
-    security = Character:new(world,map,{
-        name="Security",
+    security0 = Character:new(world,map,{
+        name="Security Guard",
         spec=require("characters.guard"),
         avatar="art/guard.png",
         startX=52,
@@ -87,15 +87,16 @@ function scene:create( event )
                     function(next) nena:moveTo(44,29,next) end,
                     function(next) 
                         nena:setFacing(1)
-                        security:setFacing(-1)
+                        security0:setFacing(-1)
                         next()
                     end,
                     function(next) msg("Hi - Excuse me. Can I get past you?",next) end,
-                    function(next) msg(security,"Sorry Ma'am - No one can enter the set while the show is filming",next) end,
+                    function(next) msg(security0,"Sorry Ma'am - No one can enter the set while the show is filming",next) end,
                 })
             end, 
         }
     })
+    self.security = security0
     
     neve = Character:new(world,map,{
         name="Nev",
@@ -175,14 +176,14 @@ function scene:create( event )
                                             function(next) msg(neve, "OK - Let me see what I can do",next) end,
                                             function(next) neve:moveTo(61,29,next) end,
                                             function(next)
-                                                security:setFacing(1)
+                                                security0:setFacing(1)
                                                 neve:setFacing(-1)
                                                 msg(neve,"Excuse me - Can you help me with something over there?",next)
                                             end,
-                                            function(next) msg(security,"Yes sir",next) end, 
+                                            function(next) msg(security0,"Yes sir",next) end, 
                                             function(next) 
                                                 neve:moveTo(3,27)
-                                                security:moveTo(5,32)
+                                                security0:moveTo(5,32)
                                             end
                                         })
                                     end
@@ -201,6 +202,7 @@ function scene:create( event )
             end,
         }
     })
+    self.neve = neve
 
     exit = Interactable:new(world,{
         name="exit",
@@ -266,7 +268,7 @@ function scene:create( event )
                 if not composer.getVariable("neveDistractSecurity") then
                     async.waterfall({
                         function(next) nena:moveTo(44,29,next) end,
-                        function(next) msg(security,"Sorry Ma'am - No one can enter the set while the show is filming",next) end,
+                        function(next) msg(security0,"Sorry Ma'am - No one can enter the set while the show is filming",next) end,
                     })
                 else
                     async.waterfall({
@@ -309,8 +311,12 @@ function scene:show( event )
         -- Code here runs when the scene is still off screen (but is about to come on screen)
         nena = self.nena
         world = self.world
+        security0 = self.security
+        neve = self.neve
         
         self.nena:reinit()
+        self.security:reinit()
+        self.neve:reinit()
 
         if (lastScene == "hotelbridge") then
             nena:setXY(104,32)
@@ -325,8 +331,10 @@ function scene:show( event )
         if composer.getVariable("neveDistractSecurity") then
             neve:setXY(3,27)
             neve:setFacing(-1)
-            security:setXY(5,32)
-            security:setFacing(-1)
+            security0:setXY(5,32)
+            security0:setFacing(-1)
+        else 
+            security0:setXY(52,26)
         end
  
     elseif ( phase == "did" ) then
@@ -357,6 +365,8 @@ function scene:hide( event )
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
         if self.nena then self.nena:deinit() end
+        if self.security then self.security:deinit() end
+        if self.neve then self.neve:deinit() end
  
     end
 end

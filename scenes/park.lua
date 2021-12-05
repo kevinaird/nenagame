@@ -205,6 +205,7 @@ function scene:show( event )
         world = self.world
 
         self.nena:reinit()
+        self.mom:reinit()
 
         if ( lastScene == "outsidenenas") then
             nena:setXY(8,60)
@@ -262,6 +263,7 @@ function scene:hide( event )
     elseif ( phase == "did" ) then
         -- Code here runs immediately after the scene goes entirely off screen
         if self.nena then self.nena:deinit() end
+        if self.mom then self.mom:deinit() end
  
     end
 end
