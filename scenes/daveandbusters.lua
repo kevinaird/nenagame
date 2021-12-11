@@ -116,7 +116,7 @@ function scene:create( event )
                                 end
                             })
                             local attempts = composer.getVariable("craneGameAttempts")
-                            if attempts > 1 and attempts < 3 then 
+                            if attempts and attempts > 1 and attempts < 3 then 
                                 table.insert(choices, { 
                                     label="Ask about Crane Game", 
                                     fn=function() 
