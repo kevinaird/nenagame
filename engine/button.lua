@@ -1,3 +1,4 @@
+local BGM = require("engine.bgm");
 
 local Button = { }
 Button.__index = Button
@@ -39,6 +40,9 @@ function Button:new(opts, actionFn)
         if ( event.phase == "began") then 
             display.getCurrentStage():setFocus( thisButton )
             thisButton.isFocus = true
+            thisButton:setFillColor(0.3,1)
+            local bgm = BGM:new()
+            bgm:click()
         elseif ( thisButton.isFocus ) then
             if ( event.phase == "ended" and actionFn) then
                 actionFn(thisButton)
@@ -47,6 +51,11 @@ function Button:new(opts, actionFn)
             if ( event.phase == "ended" or event.phase == "cancelled" ) then
                 display.getCurrentStage():setFocus( nil )
                 thisButton.isFocus = nil
+                if (opts.nobg~=true) then
+                    thisButton:setFillColor( 0, 0.8 )
+                else
+                    thisButton:setFillColor(0,0.01)
+                end
             end
         end
         

@@ -12,6 +12,8 @@ function BGM:new(opts)
     self.currentBGM = o
     self.currentPlaying = ""
 
+    self.clickAudio = audio.loadSound( "music/misc_menu.wav" )
+
     return o
 end
 
@@ -53,6 +55,11 @@ function BGM:stop(cb)
     audio.fadeOut(t)
     self.currentPlaying = ""
     if cb then timer.performWithDelay(t,function() cb() end); end
+end
+
+function BGM:click()
+    local channel = audio.play( self.clickAudio )
+    audio.setVolume(1.0,{ channel=channel })
 end
 
 return BGM

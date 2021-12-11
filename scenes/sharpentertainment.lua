@@ -81,8 +81,8 @@ function scene:create( event )
             Talk=function()
                 async.waterfall({
                     function(next) nena:moveTo(63,40,next) end,
-                    function(next) msg(nena,"Hey you! I have a lot I need to say to you!",next) end,
-                    function(next) nena:setFacing(1); matt:setFacing(-1); next() end,
+                    function(next) nena:setFacing(1); msg(nena,"Hey you! I have a lot I need to say to you!",next) end,
+                    function(next) matt:setFacing(-1); next() end,
                     function(next) msg(matt,"You! You were just on the Maury set!!",next) end,
                     function(next) msg(matt,"You walked right onto the set wearing an Oodie and claimed to be a some sort of therapist!",next) end,
                     function(next) msg(matt,"It was the craziest thing I've ever seen!",next) end,

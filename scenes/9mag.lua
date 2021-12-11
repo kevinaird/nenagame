@@ -313,6 +313,7 @@ function scene:create( event )
                                     async.waterfall({
                                         function(next) msg("So what are you doing here Amber?",next) end,
                                         function(next) msg(amber,"I'm a big fan of 9mag. I'm here to get my next tattoo!",next) end,
+                                        function(next) msg(amber,"Maybe something on the forehead. Face tats are in right now.",next) end,
                                         function(next) showOptions() end,
                                     })
                                 end,
