@@ -269,6 +269,12 @@ function scene:create( event )
         width=98,
         height=26,
         actions={
+            Look=function()
+                async.waterfall({
+                    function(next) nena:moveTo(125,44,next) end,
+                    function(next) msg("Truffle Chips!!") end,
+                })
+            end,
             Take=function()
                 async.waterfall({
                     function(next) nena:moveTo(125,44,next) end,
@@ -280,6 +286,138 @@ function scene:create( event )
                         end
                     end,
                     function(next) Inventory:addItem(truffeChips,next) end,
+                })
+            end
+        }
+    })
+
+    cans = Interactable:new(world,{
+        name="Cans",
+        x=850,
+        y=179,
+        width=78,
+        height=99,
+        actions={
+            Look=function()
+                async.waterfall({
+                    function(next) nena:moveTo(112,45,next) end,
+                    function(next) msg("Canned food. Gross") end,
+                })
+            end,
+            Take=function()
+                async.waterfall({
+                    function(next) nena:moveTo(112,45,next) end,
+                    function(next) msg("I don't need that") end,
+                })
+            end
+        }
+    })
+
+    milk = Interactable:new(world,{
+        name="Milk",
+        x=1049,
+        y=188,
+        width=40,
+        height=130,
+        actions={
+            Look=function()
+                async.waterfall({
+                    function(next) nena:moveTo(136,47,next) end,
+                    function(next) msg("Jugs of milk") end,
+                })
+            end,
+            Take=function()
+                async.waterfall({
+                    function(next) nena:moveTo(136,47,next) end,
+                    function(next) msg("I don't need that") end,
+                })
+            end
+        }
+    })
+
+    Soda = Interactable:new(world,{
+        name="Soda",
+        x=1095,
+        y=187,
+        width=40,
+        height=131,
+        actions={
+            Look=function()
+                async.waterfall({
+                    function(next) nena:moveTo(140,47,next) end,
+                    function(next) msg("Various sodas") end,
+                })
+            end,
+            Take=function()
+                async.waterfall({
+                    function(next) nena:moveTo(140,47,next) end,
+                    function(next) msg("I don't need that") end,
+                })
+            end
+        }
+    })
+
+    cheese = Interactable:new(world,{
+        name="Cheese",
+        x=674,
+        y=271,
+        width=154,
+        height=46,
+        actions={
+            Look=function()
+                async.waterfall({
+                    function(next) nena:moveTo(94,44,next) end,
+                    function(next) msg("Cheese!") end,
+                })
+            end,
+            Take=function()
+                async.waterfall({
+                    function(next) nena:moveTo(94,44,next) end,
+                    function(next) msg("I don't need that") end,
+                })
+            end
+        }
+    })
+
+    snacks = Interactable:new(world,{
+        name="Snacks",
+        x=946,
+        y=274,
+        width=79,
+        height=50,
+        actions={
+            Look=function()
+                async.waterfall({
+                    function(next) nena:moveTo(125,44,next) end,
+                    function(next) msg("Crackers and snacks") end,
+                })
+            end,
+            Take=function()
+                async.waterfall({
+                    function(next) nena:moveTo(125,44,next) end,
+                    function(next) msg("I don't need that") end,
+                })
+            end
+        }
+    })
+
+    meat = Interactable:new(world,{
+        name="Meat",
+        x=775,
+        y=468,
+        width=373,
+        height=99,
+        actions={
+            Look=function()
+                async.waterfall({
+                    function(next) nena:moveTo(125,64,next) end,
+                    function(next) msg("Various meats. Not great for the bowels.") end,
+                })
+            end,
+            Take=function()
+                async.waterfall({
+                    function(next) nena:moveTo(125,64,next) end,
+                    function(next) msg("I don't need that") end,
                 })
             end
         }
