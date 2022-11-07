@@ -1,6 +1,6 @@
 # Nena Game!
 
-A point and click adventure game built in Solar2d for the purposes of proposing to my girlfriend Nena. And it worked!
+A point and click adventure game built in Solar2d for the purposes of proposing to my ~~girlfriend~~ fiance Nena. And it worked!
 
 ## Features
 
@@ -8,7 +8,7 @@ A point and click adventure game built in Solar2d for the purposes of proposing 
 - Maury Povich references
 - Blue Jays references
 - Inside jokes
-- Everything my girlfriend loves
+- Everything Nena loves
 
 ## Less Important Technical Features
 
