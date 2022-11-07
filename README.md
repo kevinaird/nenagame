@@ -1,6 +1,6 @@
 # Nena Game!
 
-A point and click adventure game built in Solar2d for the purposes of proposing to my ~~girlfriend~~ fiance Nena. And it worked!
+A point and click adventure game built in [Solar2d](https://solar2d.com/) for the purposes of proposing to my ~~girlfriend~~ fiance Nena. And it worked!
 
 ## Features
 
