@@ -36,8 +36,9 @@ function cutscene(videoFname, skippable, next)
        end
    end
    
-   local hostname = "192.168.86.32" 
+   --local hostname = "192.168.86.32" 
    --local hostname = "clipsmatic1.ddns.net"
+   local hostname = "greynunsdrive.com"
 
    local url = ("http://%s/NenaGame/%s"):format(hostname,videoFname)
    video:load(url, media.RemoteSource )

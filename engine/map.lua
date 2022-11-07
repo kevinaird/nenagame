@@ -57,7 +57,7 @@ function Map:new(world, opts)
 
     end
     
-    local map = o:makeGrid(o.mapWidth, o.mapHeight)
+    local map = nil
     local map2 = o:makeGrid(o.mapWidth, o.mapHeight, true)
     
     local obstructJsonfile = system.pathForFile(opts.obstructfile,system.ResourceDirectory) .. ".json"
@@ -65,6 +65,8 @@ function Map:new(world, opts)
 
     local json = require("json")
     if system.getInfo("platform") ~= 'html5' then
+        map = o:makeGrid(o.mapWidth, o.mapHeight)
+
         print(("writing to... %s"):format(obstructJsonfile))
         local file, errorString = io.open( obstructJsonfile, "w" )
         if file then 
@@ -86,6 +88,8 @@ function Map:new(world, opts)
             map = json.decode(contents)
             print(("opened... %s"):format(obstructJsonfile))
             --print(inspect(map))
+
+            o.map = map
         else
             print(("error opening file... %s"):format(errorString))
         end
@@ -142,7 +146,10 @@ function Map:grid2coord(p)
 end
 
 function Map:collissionTest(x1, y1) 
-    if not (self.collisions_alpha) then return 0 end
+    if not (self.collisions_alpha) then 
+        if not (self.map) then return 0 end
+        return self.map[y1][x1]
+    end
     local x, y = self:grid2coord(x1), self:grid2coord(y1)
     local index = (y - 1) * self.background.width + x 
     return self.collisions_alpha:byte(index) 
@@ -154,8 +161,8 @@ function Map:makeGrid(w, h, unobstructed)
         grid[i] = {}
 
         for j = 1, w do
-            local a = self:collissionTest( j, i )
-            if (unobstructed) then a=0 end
+            local a = 0
+            if not (unobstructed) then a = self:collissionTest( j, i ) end
             grid[i][j] = a -- Fill the values here
         end
     end

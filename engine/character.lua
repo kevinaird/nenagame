@@ -249,7 +249,8 @@ function Character:moveTo1(endx, endy,allowInterupt,onFinish)
 
         processNode(nodes,1)
 
-    elseif system.getInfo("platform") ~= 'html5' then
+    else
+    ---elseif system.getInfo("platform") ~= 'html5' then
         path = self.map.finder2:getPath(startx, starty, endx, endy)
         if path then
             print("using path2");
@@ -264,13 +265,15 @@ function Character:moveTo1(endx, endy,allowInterupt,onFinish)
             if not allowInterupt then 
                 Runtime:dispatchEvent( { name="dialogClosed" } )
             end
+            if onFinish then onFinish() end
         end
-    else 
-        self.sprite:setSequence( "stand" )
-        self.sprite:play()
-        if not allowInterupt then 
-            Runtime:dispatchEvent( { name="dialogClosed" } )
-        end 
+    -- else 
+    --     self.sprite:setSequence( "stand" )
+    --     self.sprite:play()
+    --     if not allowInterupt then 
+    --         Runtime:dispatchEvent( { name="dialogClosed" } )
+    --     end 
+    --     if onFinish then onFinish() end
     end
 end
 
